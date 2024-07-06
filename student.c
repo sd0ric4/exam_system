@@ -77,7 +77,7 @@ void select_random_questions(cJSON *questions, int count)
 void display_question_and_get_answer(cJSON *question)
 {
     // 实现显示题目和接收答案的代码
-    printf("题目：\n%s\n", cJSON_GetObjectItem(question, "title")->valuestring);
+    printf("\033[1m%s\033[0m \n\033[31m%s\033[0m\n", cJSON_GetObjectItem(question,"type")->valuestring,cJSON_GetObjectItem(question, "title")->valuestring);
     cJSON *options = cJSON_GetObjectItem(question, "options");
     if (options != NULL)
     {
@@ -130,11 +130,13 @@ void compare_answers_and_score(cJSON *question, const char *user_answer)
 
     if (strcmp(correct_answer, upper_case_answer) == 0)
     {
-        printf("回答正确！\n");
+        // 回答正确为绿色
+        printf("\033[32m回答正确!\033[0m\n\n");
     }
     else
     {
-        printf("回答错误！正确答案是：%s\n", correct_answer);
+        // 回答错误为红色，正确答案为绿色
+        printf("\033[31m回答错误!\033[0m 正确答案是：\033[32m%s\033[0m\n\n", correct_answer);
     }
 }
 

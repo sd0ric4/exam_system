@@ -718,62 +718,62 @@
     "type": "判断题",
     "title": "中国共产党致力于为中国人民谋幸福、为中华民族谋复兴，同时也致力于为人类谋进步、为世界谋大同。",
     "options": [{ "A": "对" }, { "B": "错" }],
-    "correctAnswer": "对"
+    "correctAnswer": "A"
   },
   {
     "chapter": "ch16",
     "type": "判断题",
     "title": "坚持走和平发展道路，是我们党根据时代发展潮流和我国根本利益作出的战略抉择，是新时代中国外交的基本原则。",
     "options": [{ "A": "对" }, { "B": "错" }],
-    "correctAnswer": "对"
+    "correctAnswer": "A"
   },
   {
     "chapter": "ch16",
     "type": "判断题",
     "title": "中国坚持走和平发展道路，集中力量办好自己的事，本身就是对世界和平发展的重大贡献。",
     "options": [{ "A": "对" }, { "B": "错" }],
-    "correctAnswer": "对"
+    "correctAnswer": "A"
   },
   {
     "chapter": "ch16",
     "type": "判断题",
     "title": "大国拥有更多的资源，具备更强的能力，有责任也有义务为维护国际和平与安全发挥更大作用。",
     "options": [{ "A": "对" }, { "B": "错" }],
-    "correctAnswer": "对"
+    "correctAnswer": "A"
   },
   {
     "chapter": "ch16",
     "type": "判断题",
     "title": "任何外国，不要指望中国会拿自己的核心利益做交易，不要指望中国会吞下损害自己主权、安全、发展利益的苦果。",
     "options": [{ "A": "对" }, { "B": "错" }],
-    "correctAnswer": "对"
+    "correctAnswer": "A"
   },
   {
     "chapter": "ch16",
     "type": "判断题",
     "title": "推动构建人类命运共同体，是当代中国共产党人回答和解决关乎人类前途命运的时代之问的中国方案，是应对人类共同挑战、建设更加繁荣美好世界的人间正道。",
     "options": [{ "A": "对" }, { "B": "错" }],
-    "correctAnswer": "对"
+    "correctAnswer": "A"
   },
   {
     "chapter": "ch16",
     "type": "判断题",
     "title": "推进全球治理体系改革和建设，是完善全球治理、增进世界各国人民福祉的客观要求，也是构建人类命运共同体的内在要求。",
     "options": [{ "A": "对" }, { "B": "错" }],
-    "correctAnswer": "对"
+    "correctAnswer": "A"
   },
   {
     "chapter": "ch16",
     "type": "判断题",
     "title": "我们应当以多边主义之名行单边主义之实，搞有选择的多边主义。",
     "options": [{ "A": "对" }, { "B": "错" }],
-    "correctAnswer": "错"
+    "correctAnswer": "B"
   },
   {
     "chapter": "ch16",
     "type": "判断题",
     "title": "共建“一带一路”就是要谋求地缘政治联盟和军事同盟。",
     "options": [{ "A": "对" }, { "B": "错" }],
-    "correctAnswer": "错"
+    "correctAnswer": "B"
   }
 ]

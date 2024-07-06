@@ -60,9 +60,9 @@ clean:
 
 # 添加check目标
 check:
-    @echo "Running tests..."
+	@echo "Running tests..."
 	./\$(TARGET)
-    # 例如: ./test_student
+	# 例如: ./test_student
 EOF
 
 echo "Configuration completed successfully."

@@ -6,7 +6,7 @@
 #include <cjson/cJSON.h>
 #include <locale.h>
 #include <getopt.h>
-
+#include "student.h"
 #define PORT 8888
 
 cJSON *question_bank = NULL;

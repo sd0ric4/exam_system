@@ -38,8 +38,8 @@ esac
 # 检查cjson库是否可用
 echo "#include <cjson/cJSON.h>" | gcc -E - > /dev/null 2>&1
 if [ $? -ne 0 ]; then
-  echo "Error: cjson library is not installed. Please install cjson."
-  exit 1
+	echo "Error: cjson library is not installed. Please install cjson."
+	exit 1
 fi
 
 # 生成Makefile
@@ -53,10 +53,10 @@ CFLAGS=$CFLAGS
 SRC=student.c
 
 \$(TARGET): \$(SRC)
-    \$(CC) -o \$@ \$^ \$(CFLAGS)
+	\$(CC) -o \$@ \$^ \$(CFLAGS)
 
 clean:
-    \$(RM) \$(TARGET)
+	\$(RM) \$(TARGET)
 EOF
 
 echo "Configuration completed successfully."

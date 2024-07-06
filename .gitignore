@@ -35,3 +35,6 @@ tests_output/
 student
 makefile
 Makefile
+test
+test.*
+test_*

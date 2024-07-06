@@ -33,3 +33,4 @@ logs/
 tests_output/
 
 student
+makefile

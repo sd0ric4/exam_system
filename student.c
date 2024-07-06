@@ -2,7 +2,9 @@
 #include <stdlib.h>
 #include <time.h>
 #include <cjson/cJSON.h>
+#include <string.h>
 
+void compare_answers_and_score(cJSON *question, const char *user_answer);
 /**
  * 加载题库
  * @param filename 题库文件名
@@ -60,7 +62,6 @@ cJSON *load_question_bank(const char *filename)
 void select_random_questions(cJSON *questions, int count)
 {
     // 实现随机选择题目的代码
-    // 随机选择count个题目，每个题目不能重复，然后存到新建的用户名+系统时间.json文件中
     for (int i = 0; i < count; i++)
     {
         int index = rand() % cJSON_GetArraySize(questions);
@@ -85,28 +86,7 @@ void select_random_questions(cJSON *questions, int count)
 void display_question_and_get_answer(cJSON *question)
 {
     // 实现显示题目和接收答案的代码
-}
-
-// 比较答案并记录得分
-void compare_answers_and_score(cJSON *question, const char *user_answer)
-{
-    // 实现比较答案和记录得分的代码
-}
-
-int main()
-{
-    // 初始化随机数生成器
-    srand(time(NULL));
-
-    // 加载题库
-    cJSON *question_bank = load_question_bank("ch16.json");
-
-    // 练习功能或考试功能的实现
-    // ...
-    printf("题库加载成功\n");
-    // 展示题目
-    cJSON *question = cJSON_GetArrayItem(question_bank, 0);
-    printf("题目：%s\n", cJSON_GetObjectItem(question, "title")->valuestring);
+    printf("题目：\n%s\n", cJSON_GetObjectItem(question, "title")->valuestring);
     cJSON *options = cJSON_GetObjectItem(question, "options");
     if (options != NULL)
     {
@@ -124,6 +104,54 @@ int main()
             }
         }
     }
+    // 接收答案
+    char user_answer[16];
+    printf("请输入答案：");
+    scanf("%s", user_answer);
+    // 比较答案并记录得分
+    compare_answers_and_score(question, user_answer);
+}
+
+// 比较答案并记录得分
+void compare_answers_and_score(cJSON *question, const char *user_answer)
+{
+    // 实现比较答案和记录得分的代码
+    const char *correct_answer = cJSON_GetObjectItem(question, "correctAnswer")->valuestring;
+    if (strcmp(correct_answer, user_answer) == 0)
+    {
+        printf("回答正确！\n");
+    }
+    else
+    {
+        printf("回答错误！正确答案是：%s\n", correct_answer);
+    }
+}
+
+int main()
+{
+    // 初始化随机数生成器
+    srand(time(NULL));
+
+    // 加载题库
+    cJSON *question_bank = load_question_bank("ch16.json");
+    if (question_bank == NULL)
+    {
+        printf("题库加载失败。\n");
+        return 1;
+    }
+
+    printf("题库加载成功\n");
+
+    // 随机选择并展示题目
+    int questions_to_display = 5; // 假设我们想展示5个题目
+    int question_bank_size = cJSON_GetArraySize(question_bank);
+    for (int i = 0; i < questions_to_display; i++)
+    {
+        int index = rand() % question_bank_size;
+        cJSON *question = cJSON_GetArrayItem(question_bank, index);
+        display_question_and_get_answer(question);
+    }
+
     // 清理资源
     cJSON_Delete(question_bank);
 

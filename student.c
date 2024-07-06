@@ -1,14 +1,9 @@
+#include "student.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
 #include <cjson/cJSON.h>
 #include <string.h>
-
-// 函数声明
-void compare_answers_and_score(cJSON *question, const char *user_answer);
-void display_question_and_get_answer(cJSON *question);
-void select_random_questions(cJSON *questions, int count);
-cJSON *load_question_bank(const char *filename);
 
 /**
  * 加载题库

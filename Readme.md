@@ -16,5 +16,6 @@
 
 ## 编译运行
 ```bash
+./configure
 make
 ```

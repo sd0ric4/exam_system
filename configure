@@ -47,9 +47,9 @@ echo "Generating Makefile for $OS..."
 cat > Makefile <<EOF
 # 自动生成的Makefile
 CC=gcc
-RM=\$RM
-TARGET=\$TARGET
-CFLAGS=\$CFLAGS
+RM=$RM
+TARGET=$TARGET
+CFLAGS=$CFLAGS
 SRC=student.c
 
 \$(TARGET): \$(SRC)

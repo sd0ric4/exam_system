@@ -66,17 +66,17 @@ check:
 
 # 添加distcheck目标
 distcheck:
-    @echo "Running distcheck..."
+	@echo "Running distcheck..."
     # 编译
-    make \$(TARGET)
+	make \$(TARGET)
     # 运行测试
-    make check
+	make check
     # 模拟安装过程
-    @echo "Simulating installation..."
+	@echo "Simulating installation..."
     # 模拟卸载过程
-    @echo "Simulating uninstallation..."
+	@echo "Simulating uninstallation..."
     # 检查是否有遗留文件
-    @echo "Checking for leftover files..."
+	@echo "Checking for leftover files..."
 EOF
 
 echo "Configuration completed successfully."

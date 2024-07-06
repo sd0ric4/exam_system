@@ -4,7 +4,12 @@
 #include <cjson/cJSON.h>
 #include <string.h>
 
+// 函数声明
 void compare_answers_and_score(cJSON *question, const char *user_answer);
+void display_question_and_get_answer(cJSON *question);
+void select_random_questions(cJSON *questions, int count);
+cJSON *load_question_bank(const char *filename);
+
 /**
  * 加载题库
  * @param filename 题库文件名
@@ -12,22 +17,6 @@ void compare_answers_and_score(cJSON *question, const char *user_answer);
  */
 cJSON *load_question_bank(const char *filename)
 {
-    // 实现读取文件和解析JSON的代码
-    /**
-     *   {
-    "chapter": "ch16",
-    "type": "单选题",
-    "title": "【单选题】当今世界正经历百年未有之大变局，国际力量对比深刻变化，下列说法中错误的是（）。",
-    "options": [
-      { "A": "“西升东降”“西治中乱”" },
-      { "B": "多个发展中心在世界各地区逐渐形成" },
-      { "C": "发达国家内部矛盾重重、实力相对下降" },
-      { "D": "新兴市场国家和发展中国家群体性崛起" }
-    ],
-    "correctAnswer": "A"
-  },
-     */
-    // 题目格式为上，title为题目，options为题干
     //  读取文件
     FILE *fp = fopen(filename, "r");
     if (fp == NULL)
@@ -58,7 +47,11 @@ cJSON *load_question_bank(const char *filename)
     return question_bank;
 }
 
-// 随机选择题目
+/**
+ * 随机选择题目
+ * @param questions 题库JSON对象
+ * @param count 题目数量
+ */
 void select_random_questions(cJSON *questions, int count)
 {
     // 实现随机选择题目的代码
@@ -82,7 +75,10 @@ void select_random_questions(cJSON *questions, int count)
     }
 }
 
-// 显示题目并接收答案
+/**
+ * 显示题目并获取答案
+ * @param question 题目JSON对象
+ */
 void display_question_and_get_answer(cJSON *question)
 {
     // 实现显示题目和接收答案的代码
@@ -112,12 +108,32 @@ void display_question_and_get_answer(cJSON *question)
     compare_answers_and_score(question, user_answer);
 }
 
-// 比较答案并记录得分
+/**
+ * 比较答案并记录得分
+ * @param question 题目JSON对象
+ * @param user_answer 用户答案
+ */
 void compare_answers_and_score(cJSON *question, const char *user_answer)
 {
-    // 实现比较答案和记录得分的代码
     const char *correct_answer = cJSON_GetObjectItem(question, "correctAnswer")->valuestring;
-    if (strcmp(correct_answer, user_answer) == 0)
+    // 创建一个新的字符串数组来存储大写的答案
+    char upper_case_answer[strlen(user_answer) + 1]; // +1 为了 '\0' 结尾
+
+    // 小写转大写
+    for (int i = 0; i < strlen(user_answer); i++)
+    {
+        if (user_answer[i] >= 'a' && user_answer[i] <= 'z')
+        {
+            upper_case_answer[i] = user_answer[i] - 32;
+        }
+        else
+        {
+            upper_case_answer[i] = user_answer[i];
+        }
+    }
+    upper_case_answer[strlen(user_answer)] = '\0'; // 确保字符串正确结束
+
+    if (strcmp(correct_answer, upper_case_answer) == 0)
     {
         printf("回答正确！\n");
     }
@@ -127,6 +143,9 @@ void compare_answers_and_score(cJSON *question, const char *user_answer)
     }
 }
 
+/**
+ * 主函数
+ */
 int main()
 {
     // 初始化随机数生成器
@@ -141,9 +160,11 @@ int main()
     }
 
     printf("题库加载成功\n");
-
+    printf("请选择你要多少道题目：");
+    int count;
+    scanf("%d", &count);
     // 随机选择并展示题目
-    int questions_to_display = 5; // 假设我们想展示5个题目
+    int questions_to_display = count;
     int question_bank_size = cJSON_GetArraySize(question_bank);
     for (int i = 0; i < questions_to_display; i++)
     {

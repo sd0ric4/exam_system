@@ -16,17 +16,17 @@ OS="`uname`"
 case $OS in
   'Linux')
     RM="rm -f"
-    CFLAGS="-I. -lcjson -lncurses"
+    CFLAGS="-I. -lcjson -lncurses -lmicrohttpd"
     TARGET="student"
     ;;
   'Darwin')
     RM="rm -f"
-    CFLAGS="-I. -lcjson -lncurses"
+    CFLAGS="-I. -lcjson -lncurses -lmicrohttpd"
     TARGET="student"
     ;;
   'WindowsNT')
     RM="del /Q"
-    CFLAGS="-I. -lws2_32 -lcjson -lncurses"
+    CFLAGS="-I. -lws2_32 -lcjson -lncurses -lmicrohttpd"
     TARGET="student.exe"
     ;;
   *)

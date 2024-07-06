@@ -63,7 +63,6 @@ check:
 	@echo "Running tests..."
 	./\$(TARGET)
 	# 例如: ./test_student
-EOF
 
 # 添加distcheck目标
 distcheck:

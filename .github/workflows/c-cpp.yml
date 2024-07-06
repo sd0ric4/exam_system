@@ -14,7 +14,7 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - name: Install cjson
-      run: sudo apt-get update && sudo apt-get install -y libcjson1 libcjson-dev
+      run: sudo apt-get update && sudo apt-get install -y libcjson1 libcjson-dev libncurses5-dev
     - name: configure
       run: ./configure
     - name: make

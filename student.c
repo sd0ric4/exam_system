@@ -152,7 +152,7 @@ int main()
     srand(time(NULL));
 
     // 加载题库
-    cJSON *question_bank = load_question_bank("ch16.json");
+    cJSON *question_bank = load_question_bank("./QuestionBank/ch16.json");
     if (question_bank == NULL)
     {
         printf("题库加载失败。\n");

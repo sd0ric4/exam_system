@@ -17,7 +17,6 @@
 cJSON *question_bank = NULL;
 /**
  * 读取指定文件夹下的题库
- * @return 题库路径
  */
 void read_question_bank(char *path)
 {

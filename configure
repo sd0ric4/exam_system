@@ -61,7 +61,7 @@ clean:
 # 添加check目标
 check:
 	@echo "Running tests..."
-	./\$(TARGET)
+	@echo "ch16.json" | ./\$(TARGET) -t
 	# 例如: ./test_student
 
 # 添加distcheck目标

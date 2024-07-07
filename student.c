@@ -6,14 +6,56 @@
 #include <cjson/cJSON.h>
 #include <locale.h>
 #include <getopt.h>
+#include <dirent.h>
 #include "student.h"
 
 // 定义端口号
 #define PORT 8888
+#define QUESTION_BANK_PATH "./QuestionBank"
 
 // 题库
 cJSON *question_bank = NULL;
+/**
+ * 读取指定文件夹下的题库
+ * @return 题库路径
+ */
+void read_question_bank(char *path)
+{
+    DIR *dir;
+    struct dirent *ptr;
+    dir = opendir(path);
+    printf("正在读取题库...\n");
+    if (readdir(dir) != NULL)
+    {
+        printf("题库列表：\n");
+    }
 
+    while ((ptr = readdir(dir)) != NULL)
+    {
+        if (ptr->d_type == 8)
+        {
+            char *filename = ptr->d_name;
+            char *name = filename;
+            // 添加颜色
+            printf("\033[34m%s\033[0m\n", name);
+        }
+    }
+    closedir(dir);
+}
+
+/**
+ * 选择题库
+ * @param filename 文件名
+ */
+void choose_question_bank(char *filename)
+{
+    question_bank = load_question_bank(filename);
+    if (question_bank == NULL)
+    {
+        printf("题库加载失败。\n");
+        exit(1);
+    }
+}
 
 /**
  * 从文件中加载题库
@@ -66,7 +108,7 @@ void select_random_questions(cJSON *questions, int count, cJSON *selected_questi
  */
 void display_question_and_get_answer(cJSON *question)
 {
-    printf("\033[1m%s\033[0m \n\033[31m%s\033[0m\n", cJSON_GetObjectItem(question,"type")->valuestring, cJSON_GetObjectItem(question, "title")->valuestring);
+    printf("\033[1m%s\033[0m \n\033[31m%s\033[0m\n", cJSON_GetObjectItem(question, "type")->valuestring, cJSON_GetObjectItem(question, "title")->valuestring);
     cJSON *options = cJSON_GetObjectItem(question, "options");
     if (options != NULL)
     {
@@ -230,6 +272,7 @@ int main(int argc, char *argv[])
 
     srand(time(NULL));
 
+    // 加载默认题库
     question_bank = load_question_bank("./QuestionBank/ch16.json");
     if (question_bank == NULL)
     {
@@ -245,15 +288,15 @@ int main(int argc, char *argv[])
     {
         switch (opt)
         {
-            case 'b':
-                backend_mode = 1;
-                break;
-            case 't':
-                backend_mode = 0;
-                break;
-            default:
-                fprintf(stderr, "Usage: %s [-b for backend mode] [-t for TUI mode]\n", argv[0]);
-                return 1;
+        case 'b':
+            backend_mode = 1;
+            break;
+        case 't':
+            backend_mode = 0;
+            break;
+        default:
+            fprintf(stderr, "Usage: %s [-b for backend mode] [-t for TUI mode]\n", argv[0]);
+            return 1;
         }
     }
 
@@ -274,8 +317,18 @@ int main(int argc, char *argv[])
     }
     else
     {
-        printf("题库加载成功\n");
-        printf("请选择你要多少道题目：");
+        read_question_bank(QUESTION_BANK_PATH);
+        printf("\033[1m请输入题库名:\033[0m\n");
+        char full_path[512]; // 假设这个大小足够存储 QUESTION_BANK_PATH 和 filename 的连接
+        char filename[256];
+        scanf("%s", filename);
+        strcpy(full_path, QUESTION_BANK_PATH); // 首先复制 QUESTION_BANK_PATH 到缓冲区
+        strcat(full_path, "/");                // 然后连接 /
+        strcat(full_path, filename);           // 然后连接 filename
+        printf("您选择的题库路径是:\033[34m%s\033[0m\n", full_path);
+        choose_question_bank(full_path);
+        printf("\033[32m题库加载成功\033[0m\n");
+        printf("\033[1m请选择你要多少道题目:\033[0m");
         int count;
         scanf("%d", &count);
 

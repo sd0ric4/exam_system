@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdbool.h>
 #include <time.h>
 #include <string.h>
 #include <microhttpd.h>
@@ -11,10 +12,13 @@
 
 // 定义端口号
 #define PORT 8888
+// 定义题库路径
 #define QUESTION_BANK_PATH "./QuestionBank"
-
+// 定义初始分数
+#define INIT_SCORE 100
 // 题库
 cJSON *question_bank = NULL;
+
 /**
  * 读取指定文件夹下的题库
  */
@@ -104,9 +108,11 @@ void select_random_questions(cJSON *questions, int count, cJSON *selected_questi
 /**
  * 显示题目并获取用户输入的答案
  * @param question 题目
+ * @return 答对数
  */
-void display_question_and_get_answer(cJSON *question)
+bool display_question_and_get_answer(cJSON *question)
 {
+    int count;
     printf("\033[1m%s\033[0m \n\033[31m%s\033[0m\n", cJSON_GetObjectItem(question, "type")->valuestring, cJSON_GetObjectItem(question, "title")->valuestring);
     cJSON *options = cJSON_GetObjectItem(question, "options");
     if (options != NULL)
@@ -127,7 +133,7 @@ void display_question_and_get_answer(cJSON *question)
     char user_answer[16];
     printf("请输入答案：");
     scanf("%s", user_answer);
-    compare_answers_and_score(question, user_answer);
+    return compare_answers_and_score(question, user_answer);
 }
 
 /**
@@ -135,8 +141,9 @@ void display_question_and_get_answer(cJSON *question)
  * @param question 题目
  * @param user_answer 用户答案
  */
-void compare_answers_and_score(cJSON *question, const char *user_answer)
+bool compare_answers_and_score(cJSON *question, const char *user_answer)
 {
+    bool is_correct = false;
     const char *correct_answer = cJSON_GetObjectItem(question, "correctAnswer")->valuestring;
     char upper_case_answer[strlen(user_answer) + 1];
 
@@ -156,11 +163,13 @@ void compare_answers_and_score(cJSON *question, const char *user_answer)
     if (strcmp(correct_answer, upper_case_answer) == 0)
     {
         printf("\033[32m回答正确!\033[0m\n\n");
+        is_correct = true;
     }
     else
     {
         printf("\033[31m回答错误!\033[0m 正确答案是：\033[32m%s\033[0m\n\n", correct_answer);
     }
+    return is_correct;
 }
 
 /**
@@ -327,18 +336,27 @@ int main(int argc, char *argv[])
         printf("您选择的题库路径是:\033[34m%s\033[0m\n", full_path);
         choose_question_bank(full_path);
         printf("\033[32m题库加载成功\033[0m\n");
+        double score = INIT_SCORE;
         printf("\033[1m请选择你要多少道题目:\033[0m");
         int count;
         scanf("%d", &count);
 
         int questions_to_display = count;
         int question_bank_size = cJSON_GetArraySize(question_bank);
+        int correct_count = 0;
         for (int i = 0; i < questions_to_display; i++)
         {
             int index = rand() % question_bank_size;
             cJSON *question = cJSON_GetArrayItem(question_bank, index);
-            display_question_and_get_answer(question);
+            if (display_question_and_get_answer(question))
+            {
+                correct_count++;
+            }
         }
+        printf("\033[32m正确答题数：%d\n\033[0m", correct_count); // 绿色
+        printf("\033[34m总题数：%d\n\033[0m", count);             // 蓝色
+        double final_score = score * correct_count / count;
+        printf("\033[35m最终得分：%.2f\n\033[0m", final_score); // 紫色
     }
 
     cJSON_Delete(question_bank);

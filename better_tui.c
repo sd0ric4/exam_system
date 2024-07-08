@@ -2,10 +2,46 @@
 #include <stdlib.h>
 #include <cjson/cJSON.h>
 #include <string.h>
+#include <dirent.h>
 #include <ncurses.h>
 #include <locale.h> // 包含locale.h头文件
 #include "student.h"
 
+/**
+ * 展示选择题库文件的导航页
+ * @param path 题库文件夹路径
+ */
+void navigate_question_bank(const char *path) {
+    DIR *dir;
+    struct dirent *ptr;
+    int y = 2;
+
+    initscr(); // 初始化屏幕
+    start_color(); // 初始化颜色系统
+    init_pair(1, COLOR_BLUE, COLOR_BLACK); // 初始化颜色对
+
+    dir = opendir(path);
+    if (!dir) {
+        mvprintw(1, 5, "无法打开题库目录: %s", path);
+        getch(); // 等待用户按键
+        endwin(); // 恢复终端设置
+        return;
+    }
+
+    mvprintw(1, 5, "正在读取题库...");
+    while ((ptr = readdir(dir)) != NULL) {
+        if (ptr->d_type == 8) {
+            attron(COLOR_PAIR(1));
+            mvprintw(y++, 5, "%s", ptr->d_name);
+            attroff(COLOR_PAIR(1));
+        }
+    }
+    closedir(dir);
+
+    refresh(); // 刷新屏幕以显示内容
+    getch(); // 等待用户按键
+    endwin(); // 恢复终端设置
+}
 /**
  * 展示问题
  * @param question 问题
@@ -119,6 +155,8 @@ void process_question(const char *title, const char **options, int n_options, co
 int main() {
     setlocale(LC_ALL, ""); // 设置locale
 
+    // 读取题库
+    navigate_question_bank(QUESTION_BANK_PATH);
     cJSON *json = load_question_bank("./QuestionBank/ch7.json");
 
     const cJSON *questionItem = NULL;

@@ -7,16 +7,25 @@
 #include <locale.h> // 包含locale.h头文件
 #include "student.h"
 
+
 /**
  * 展示选择题库文件的导航页
  * @param path 题库文件夹路径
+ * @return 返回所选题库文件名
  */
-void navigate_question_bank(const char *path) {
+char* navigate_question_bank(const char *path) {
     DIR *dir;
     struct dirent *ptr;
-    int y = 2;
+    char *files[256];
+    int count = 0;
+    int highlight = 0;
+    int ch;
+    static char selected_file[256];
 
     initscr(); // 初始化屏幕
+    noecho();
+    cbreak();
+    keypad(stdscr, TRUE);
     start_color(); // 初始化颜色系统
     init_pair(1, COLOR_BLUE, COLOR_BLACK); // 初始化颜色对
 
@@ -25,22 +34,45 @@ void navigate_question_bank(const char *path) {
         mvprintw(1, 5, "无法打开题库目录: %s", path);
         getch(); // 等待用户按键
         endwin(); // 恢复终端设置
-        return;
+        return NULL;
     }
 
-    mvprintw(1, 5, "正在读取题库...");
+    mvprintw(1, 5, "选择题库文件:");
     while ((ptr = readdir(dir)) != NULL) {
         if (ptr->d_type == 8) {
-            attron(COLOR_PAIR(1));
-            mvprintw(y++, 5, "%s", ptr->d_name);
-            attroff(COLOR_PAIR(1));
+            files[count] = strdup(ptr->d_name);
+            mvprintw(count + 2, 5, "%s", files[count]);
+            count++;
         }
     }
     closedir(dir);
 
-    refresh(); // 刷新屏幕以显示内容
-    getch(); // 等待用户按键
-    endwin(); // 恢复终端设置
+    while (1) {
+        for (int i = 0; i < count; ++i) {
+            if (i == highlight)
+                attron(A_REVERSE);
+            mvprintw(i + 2, 5, "%s", files[i]);
+            if (i == highlight)
+                attroff(A_REVERSE);
+        }
+
+        ch = getch();
+        switch (ch) {
+            case KEY_UP:
+                highlight = (highlight - 1 + count) % count;
+                break;
+            case KEY_DOWN:
+                highlight = (highlight + 1) % count;
+                break;
+            case 10: // Enter key
+                strcpy(selected_file, files[highlight]);
+                for (int i = 0; i < count; ++i) {
+                    free(files[i]);
+                }
+                clear();
+                return selected_file;
+        }
+    }
 }
 /**
  * 展示问题
@@ -155,9 +187,16 @@ void process_question(const char *title, const char **options, int n_options, co
 int main() {
     setlocale(LC_ALL, ""); // 设置locale
 
-    // 读取题库
-    navigate_question_bank(QUESTION_BANK_PATH);
-    cJSON *json = load_question_bank("./QuestionBank/ch7.json");
+    // 选择题库
+    char *selected_file = navigate_question_bank(QUESTION_BANK_PATH);
+    if (selected_file == NULL) {
+        fprintf(stderr, "题库选择失败\n");
+        return 1;
+    }
+
+    char filepath[512];
+    snprintf(filepath, sizeof(filepath), "%s/%s", QUESTION_BANK_PATH, selected_file);
+    cJSON *json = load_question_bank(filepath);
 
     const cJSON *questionItem = NULL;
     cJSON_ArrayForEach(questionItem, json) {

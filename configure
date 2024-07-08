@@ -17,17 +17,17 @@ case $OS in
   'Linux')
     RM="rm -f"
     CFLAGS="-I. -lcjson -lncurses -lmicrohttpd"
-    TARGET="student"
+    TARGET="main"
     ;;
   'Darwin')
     RM="rm -f"
     CFLAGS="-I. -lcjson -lncurses -lmicrohttpd"
-    TARGET="student"
+    TARGET="main"
     ;;
   'WindowsNT')
     RM="del /Q"
     CFLAGS="-I. -lws2_32 -lcjson -lncurses -lmicrohttpd"
-    TARGET="student.exe"
+    TARGET="main.exe"
     ;;
   *)
     echo "Unsupported OS: $OS"
@@ -50,7 +50,7 @@ CC=gcc
 RM=$RM
 TARGET=$TARGET
 CFLAGS=$CFLAGS
-SRC=student.c
+SRC=main.c student.c
 
 \$(TARGET): \$(SRC)
 	\$(CC) -o \$@ \$^ \$(CFLAGS)

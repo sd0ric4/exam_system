@@ -13,7 +13,8 @@
  * @param path 题库文件夹路径
  * @return 返回所选题库文件名
  */
-char *navigate_question_bank(const char *path) {
+char *navigate_question_bank(const char *path)
+{
     DIR *dir;
     struct dirent *ptr;
     char *files[256];
@@ -30,7 +31,8 @@ char *navigate_question_bank(const char *path) {
     init_pair(1, COLOR_BLUE, COLOR_BLACK); // 初始化颜色对
 
     dir = opendir(path);
-    if (!dir) {
+    if (!dir)
+    {
         mvprintw(1, 5, "无法打开题库目录: %s", path);
         getch();  // 等待用户按键
         endwin(); // 恢复终端设置
@@ -38,8 +40,10 @@ char *navigate_question_bank(const char *path) {
     }
 
     mvprintw(1, 5, "选择题库文件:");
-    while ((ptr = readdir(dir)) != NULL) {
-        if (ptr->d_type == 8) {
+    while ((ptr = readdir(dir)) != NULL)
+    {
+        if (ptr->d_type == 8)
+        {
             files[count] = strdup(ptr->d_name);
             mvprintw(count + 2, 5, "%s", files[count]);
             count++;
@@ -47,8 +51,10 @@ char *navigate_question_bank(const char *path) {
     }
     closedir(dir);
 
-    while (1) {
-        for (int i = 0; i < count; ++i) {
+    while (1)
+    {
+        for (int i = 0; i < count; ++i)
+        {
             if (i == highlight)
                 attron(A_REVERSE);
             mvprintw(i + 2, 5, "%s", files[i]);
@@ -57,7 +63,8 @@ char *navigate_question_bank(const char *path) {
         }
 
         ch = getch();
-        switch (ch) {
+        switch (ch)
+        {
         case KEY_UP:
             highlight = (highlight - 1 + count) % count;
             break;
@@ -66,7 +73,8 @@ char *navigate_question_bank(const char *path) {
             break;
         case 10: // Enter key
             strcpy(selected_file, files[highlight]);
-            for (int i = 0; i < count; ++i) {
+            for (int i = 0; i < count; ++i)
+            {
                 free(files[i]);
             }
             clear();
@@ -78,7 +86,10 @@ char *navigate_question_bank(const char *path) {
  * 展示问题
  * @param question 问题
  */
-void display_question(const char *question) { mvprintw(2, 5, "%s", question); }
+void display_question(const char *question)
+{
+    mvprintw(2, 5, "%s", question);
+}
 
 /**
  * 展示选项
@@ -89,16 +100,21 @@ void display_question(const char *question) { mvprintw(2, 5, "%s", question); }
  * @param is_multiple_choice 是否为多选题
  */
 void display_options(const char **options, int n_options, int highlight,
-                     int *selected_flags, int is_multiple_choice) {
+                     int *selected_flags, int is_multiple_choice)
+{
     const char labels[] = {'A', 'B', 'C', 'D'}; // 定义ABCD标签
-    for (int i = 0; i < n_options; ++i) {
+    for (int i = 0; i < n_options; ++i)
+    {
         if (i == highlight)
             attron(A_REVERSE);
-        if (is_multiple_choice) {
-            mvprintw(i + 5, 5, "%c. %s%s", labels[i],
-                     selected_flags[i] ? "[*] " : "[ ] ",
+        if (is_multiple_choice)
+        {
+            mvprintw(i + 5, 5, "%s%c. %s",selected_flags[i] ? "[*] " : "[ ] ", 
+                    labels[i],
                      options[i]); // 多选题显示选中标记
-        } else {
+        }
+        else
+        {
             mvprintw(i + 5, 5, "%c. %s", labels[i],
                      options[i]); // 单选题不显示选中标记
         }
@@ -116,14 +132,17 @@ void display_options(const char **options, int n_options, int highlight,
  * @return 返回用户选择的选项编号字符串
  */
 char *get_user_choice(const char **options, int n_options, int highlight,
-                      int *selected_flags, int is_multiple_choice) {
+                      int *selected_flags, int is_multiple_choice)
+{
     int choice;
     static char user_choice[256] = "";
     char labels[] = {'A', 'B', 'C', 'D'};
     user_choice[0] = '\0'; // 清空之前的选择
-    while (1) {
+    while (1)
+    {
         choice = getch();
-        switch (choice) {
+        switch (choice)
+        {
         case KEY_UP:
             highlight = (highlight - 1 + n_options) % n_options;
             break;
@@ -131,21 +150,27 @@ char *get_user_choice(const char **options, int n_options, int highlight,
             highlight = (highlight + 1) % n_options;
             break;
         case ' ':
-            if (is_multiple_choice) {
+            if (is_multiple_choice)
+            {
                 selected_flags[highlight] =
                     !selected_flags[highlight]; // 切换选项标记
             }
             break;
         case 10: // Enter key
-            if (is_multiple_choice) {
-                for (int i = 0; i < n_options; ++i) {
-                    if (selected_flags[i]) {
+            if (is_multiple_choice)
+            {
+                for (int i = 0; i < n_options; ++i)
+                {
+                    if (selected_flags[i])
+                    {
                         char temp[4];
                         sprintf(temp, "%c", labels[i]);
                         strcat(user_choice, temp);
                     }
                 }
-            } else {
+            }
+            else
+            {
                 sprintf(user_choice, "%c", labels[highlight]);
             }
             return user_choice; // 返回用户选择的选项编号字符串
@@ -159,17 +184,43 @@ char *get_user_choice(const char **options, int n_options, int highlight,
  * 展示用户选择的选项
  * @param user_choice 用户选择的选项
  */
-void display_user_choice(const char *user_choice) {
-    mvprintw(10, 5, "Your choice is: %s", user_choice);
+void display_user_choice(const char *user_choice)
+{
+    mvprintw(10, 5, "你的答案是: %s", user_choice);
 }
 /**
  * 展示答案
  * @param answer 答案
  */
-void display_answer(const char *answer) {
-    mvprintw(11, 5, "The correct answer is: %s", answer);
+void display_answer(const char *answer)
+{
+    mvprintw(11, 5, "正确答案是: %s", answer);
 }
 
+/**
+ * 比较答案并计分
+ * @param user_choice 用户答案
+ * @param answer 正确答案
+ */
+bool compare_answers_and_score_tui(const char *user_choice, const char *answer)
+{
+    return strcmp(user_choice, answer) == 0;
+}
+/**
+ * 展示答题结果是否正确
+ * @param is_correct 是否正确
+ */
+void display_result(bool is_correct)
+{
+    if (is_correct)
+    {
+        mvprintw(12, 5, "回答正确!");
+    }
+    else
+    {
+        mvprintw(12, 5, "回答错误!");
+    }
+}
 /**
  * 处理问题
  * @param title 标题
@@ -178,7 +229,8 @@ void display_answer(const char *answer) {
  * @param type 题目类型
  */
 void process_question(const char *title, const char **options, int n_options,
-                      const char *answer, const char *type) {
+                      const char *answer, const char *type)
+{
     initscr();
     noecho();
     cbreak();
@@ -194,13 +246,16 @@ void process_question(const char *title, const char **options, int n_options,
     int is_multiple_choice = (strcmp(type, "多选题") == 0);
 
     // 根据题目类型调整显示
-    if (strcmp(type, "判断题") == 0) {
+    if (strcmp(type, "判断题") == 0)
+    {
         const char *judgment_options[2] = {"对", "错"};
         display_options(judgment_options, 2, 0, selected_flags,
                         is_multiple_choice);
         user_choice = get_user_choice(judgment_options, 2, 0, selected_flags,
                                       is_multiple_choice); // 获取用户选择
-    } else {
+    }
+    else
+    {
         display_options(options, n_options, 0, selected_flags,
                         is_multiple_choice);
         user_choice = get_user_choice(options, n_options, 0, selected_flags,
@@ -211,18 +266,22 @@ void process_question(const char *title, const char **options, int n_options,
     display_user_choice(user_choice);
     // 展示答案
     display_answer(answer);
+    // 比较答案并计分
+    bool is_correct = compare_answers_and_score_tui(user_choice, answer);
+    display_result(is_correct);
     attroff(COLOR_PAIR(2));
     getch(); // 等待另一个按键以退出
     clear(); // 清屏
-
 }
 
-int main() {
+int main()
+{
     setlocale(LC_ALL, ""); // 设置locale
 
     // 选择题库
     char *selected_file = navigate_question_bank(QUESTION_BANK_PATH);
-    if (selected_file == NULL) {
+    if (selected_file == NULL)
+    {
         fprintf(stderr, "题库选择失败\n");
         return 1;
     }
@@ -233,7 +292,8 @@ int main() {
     cJSON *json = load_question_bank(filepath);
 
     const cJSON *questionItem = NULL;
-    cJSON_ArrayForEach(questionItem, json) {
+    cJSON_ArrayForEach(questionItem, json)
+    {
         const cJSON *title =
             cJSON_GetObjectItemCaseSensitive(questionItem, "title");
         const cJSON *options =
@@ -246,7 +306,8 @@ int main() {
         const char *optionsArray[4];
         int i = 0;
 
-        cJSON_ArrayForEach(optionItem, options) {
+        cJSON_ArrayForEach(optionItem, options)
+        {
             cJSON *optionValue = optionItem->child;
             optionsArray[i++] = optionValue->valuestring;
         }

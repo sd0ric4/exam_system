@@ -9,6 +9,25 @@
 #include <string.h>
 
 /**
+ * 输入题量随机选择题目
+ * @param conunt 题量
+ * @param 导入的题库
+ * @return 返回的题，cJSON对象
+ */
+cJSON *select_questions_randomly(int count, cJSON *questions)
+{
+    cJSON *selected_questions = cJSON_CreateArray();
+    int n_questions = cJSON_GetArraySize(questions);
+    for (int i = 0; i < count; ++i)
+    {
+        int index = rand() % n_questions;
+        cJSON *question = cJSON_GetArrayItem(questions, index);
+        cJSON_AddItemToArray(selected_questions, cJSON_Duplicate(question, 1));
+    }
+    return selected_questions;
+}
+
+/**
  * 展示选择题库文件的导航页
  * @param path 题库文件夹路径
  * @return 返回所选题库文件名
@@ -109,8 +128,8 @@ void display_options(const char **options, int n_options, int highlight,
             attron(A_REVERSE);
         if (is_multiple_choice)
         {
-            mvprintw(i + 5, 5, "%s%c. %s",selected_flags[i] ? "[*] " : "[ ] ", 
-                    labels[i],
+            mvprintw(i + 5, 5, "%s%c. %s", selected_flags[i] ? "[*] " : "[ ] ",
+                     labels[i],
                      options[i]); // 多选题显示选中标记
         }
         else

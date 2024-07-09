@@ -145,6 +145,7 @@ char *navigate_question_bank(const char *path)
         }
     }
 }
+
 /**
  * 展示问题
  * @param question 问题
@@ -251,6 +252,7 @@ void display_user_choice(const char *user_choice)
 {
     mvprintw(10, 5, "你的答案是: %s", user_choice);
 }
+
 /**
  * 展示答案
  * @param answer 答案
@@ -276,6 +278,7 @@ bool compare_answers_and_score_tui(const char *user_choice, const char *answer)
     }
     return strcmp(user_choice, answer) == 0;
 }
+
 /**
  * 展示答题结果是否正确
  * @param is_correct 是否正确
@@ -291,6 +294,7 @@ void display_result(bool is_correct)
         mvprintw(12, 5, "回答错误!");
     }
 }
+
 /**
  * 处理问题
  * @param title 标题
@@ -306,8 +310,8 @@ void process_question(const char *title, const char **options, int n_options,
     cbreak();
     keypad(stdscr, TRUE);
     start_color();
-    init_pair(1, COLOR_RED, COLOR_BLACK);
-    init_pair(2, COLOR_GREEN, COLOR_BLACK);
+    init_pair(1, COLOR_RED, COLOR_BLACK);// 初始化颜色对,红色
+    init_pair(2, COLOR_GREEN, COLOR_BLACK);// 初始化颜色对,绿色
 
     display_question(title);
 

@@ -3,7 +3,7 @@
 
 #include <microhttpd.h>
 #include <cjson/cJSON.h>
-
+#include <stdbool.h>
 // 函数声明
 void read_question_bank(char *path);
 void choose_question_bank(char *filename);

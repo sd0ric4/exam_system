@@ -70,6 +70,7 @@ int input_count_page()
     clear();
     return count;
 }
+
 /**
  * 展示选择题库文件的导航页
  * @param path 题库文件夹路径
@@ -266,6 +267,13 @@ void display_answer(const char *answer)
  */
 bool compare_answers_and_score_tui(const char *user_choice, const char *answer)
 {
+    if(strcmp(answer, "对") == 0)
+    {
+        answer = "A";
+    }else if(strcmp(answer, "错") == 0)
+    {
+        answer = "B";
+    }
     return strcmp(user_choice, answer) == 0;
 }
 /**

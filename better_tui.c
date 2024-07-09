@@ -28,6 +28,49 @@ cJSON *select_questions_randomly(int count, cJSON *questions)
 }
 
 /**
+ * 输入数量的页面
+ * @return 返回输入的数量
+ */
+int input_count_page()
+{
+    initscr(); // 初始化屏幕
+    noecho();
+    cbreak();
+    keypad(stdscr, TRUE);
+    start_color();                         // 初始化颜色系统
+    init_pair(1, COLOR_BLUE, COLOR_BLACK); // 初始化颜色对
+
+    mvprintw(1, 5, "输入题量:");
+    char input[256];
+    int ch;
+    int i = 0;
+    while (1)
+    {
+        ch = getch();
+        if (ch >= '0' && ch <= '9')
+        {
+            input[i++] = ch;
+            input[i] = '\0';
+            mvprintw(2, 5, "%s", input);
+        }
+        else if (ch == 127) // Backspace key
+        {
+            if (i > 0)
+            {
+                input[--i] = '\0';
+                mvprintw(2, 5, "%s", input);
+            }
+        }
+        else if (ch == 10) // Enter key
+        {
+            break;
+        }
+    }
+    int count = atoi(input);
+    clear();
+    return count;
+}
+/**
  * 展示选择题库文件的导航页
  * @param path 题库文件夹路径
  * @return 返回所选题库文件名
@@ -309,9 +352,10 @@ int main()
     snprintf(filepath, sizeof(filepath), "%s/%s", QUESTION_BANK_PATH,
              selected_file);
     cJSON *json = load_question_bank(filepath);
-
+    int count = input_count_page();
+    cJSON *selected_questions = select_questions_randomly(count, json);
     const cJSON *questionItem = NULL;
-    cJSON_ArrayForEach(questionItem, json)
+    cJSON_ArrayForEach(questionItem, selected_questions)
     {
         const cJSON *title =
             cJSON_GetObjectItemCaseSensitive(questionItem, "title");

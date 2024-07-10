@@ -1,41 +1,47 @@
 #!/bin/bash
 
-# 初始化CFLAGS和RM变量
-CFLAGS=""
+# 初始化变量
+CFLAGS="-Iinclude"
+LDFLAGS="-lncurses -lcjson -lmicrohttpd"
 RM=""
 TARGET="main"
 
 # 检查gcc是否安装
-which gcc > /dev/null 2>&1
-if [ $? -ne 0 ]; then
-  echo "Error: GCC is not installed. Please install GCC."
-  exit 1
+if ! command -v gcc &> /dev/null
+then
+    echo "Error: GCC is not installed. Please install GCC."
+    exit 1
 fi
 
 # 检查操作系统并配置相应的变量
-OS="`uname`"
+OS="$(uname)"
 case $OS in
-  'Linux' | 'Darwin')
-    RM="rm -f"
-    CFLAGS="-Iinclude -lncurses -lcjson -lmicrohttpd"
-    ;;
-  'WindowsNT')
-    RM="del /Q"
-    CFLAGS="-Iinclude -lws2_32 -lcjson -lncurses -lmicrohttpd"
-    TARGET="main.exe"
-    ;;
-  *)
-    echo "Unsupported OS: $OS"
-    exit 1
-    ;;
+    'Linux' | 'Darwin')
+        RM="rm -f"
+        ;;
+    'WindowsNT')
+        RM="del /Q"
+        CFLAGS="$CFLAGS -lws2_32"
+        TARGET="main.exe"
+        ;;
+    *)
+        echo "Unsupported OS: $OS"
+        exit 1
+        ;;
 esac
 
-# 检查cjson库是否可用
-echo "#include <cjson/cJSON.h>" | gcc -E - > /dev/null 2>&1
-if [ $? -ne 0 ]; then
-    echo "Error: cjson library is not installed. Please install cjson."
-    exit 1
-fi
+# 检查库是否可用
+check_library() {
+    echo "#include <$1>" | gcc -E - > /dev/null 2>&1
+    if [ $? -ne 0 ]; then
+        echo "Error: $1 library is not installed. Please install $1."
+        exit 1
+    fi
+}
+
+check_library "cjson/cJSON.h"
+check_library "ncurses.h"
+check_library "microhttpd.h"
 
 # 生成Makefile
 echo "Generating Makefile for $OS..."
@@ -44,6 +50,7 @@ cat > Makefile <<EOF
 CC=gcc
 RM=$RM
 CFLAGS=$CFLAGS
+LDFLAGS=$LDFLAGS
 TARGET=$TARGET
 
 # 目标文件夹
@@ -66,7 +73,7 @@ all: \$(TARGET)
 
 # 链接目标文件生成可执行文件
 \$(TARGET): \$(OBJ)
-	\$(CC) \$(CFLAGS) -o \$@ \$^
+	\$(CC) \$(CFLAGS) -o \$@ \$^ \$(LDFLAGS)
 
 # 生成目标文件
 \$(OBJDIR)/%.o: \$(SRCDIR)/%.c | \$(OBJDIR)
@@ -81,7 +88,7 @@ clean:
 	\$(RM) -rf \$(OBJDIR) \$(TARGET)
 
 # 添加check目标
-check:
+check: \$(TARGET)
 	@echo "Running tests..."
 	@echo "ch16.json" | ./\$(TARGET) -t
 
@@ -89,7 +96,7 @@ check:
 distcheck:
 	@echo "Running distcheck..."
 	# 编译
-	make \$(TARGET)
+	make all
 	# 运行测试
 	make check
 	# 模拟安装过程
@@ -98,6 +105,7 @@ distcheck:
 	@echo "Simulating uninstallation..."
 	# 检查是否有遗留文件
 	@echo "Checking for leftover files..."
+	@echo "distcheck complete."
 
 .PHONY: all clean check distcheck
 EOF

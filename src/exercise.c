@@ -274,7 +274,7 @@ void generateExercise(ExerciseDataBase *db, int numQuestions) {
     // 生成 JSON 文件,到QUESTION_BANK_PATH目录下
     char JsonFilename[32];
 
-    sprintf(JsonFilename, "%s/%s.json", QUESTION_BANK_PATH, db->ExerciseName);
+    snprintf(JsonFilename, sizeof(JsonFilename), "%s/%s.json", QUESTION_BANK_PATH, db->ExerciseName);
     generateJsonFile(db, JsonFilename);
     printf("试卷 JSON 文件名为: %s\n", JsonFilename);
 }

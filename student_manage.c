@@ -425,9 +425,8 @@ void studentmodel(cJSON *root, STU *L)
             case 1:
 
                 
-            case 2:
 
-            case 3:
+            case 2:
                 changepassword(p);
                 getchar();
                 printf("\n请按任意键返回主菜单\n");
@@ -564,8 +563,7 @@ void studentMenu()
 	printf("\t\t\t=======================考试系统=======================\n");
 	printf("\t\t\t*                                                    *\n");    
 	printf("\t\t\t*                  1>. 答题                          *\n");
-    printf("\t\t\t*                  2>. 查看分数                      *\n");
-    printf("\t\t\t*                  3>. 修改密码                      *\n");
+    printf("\t\t\t*                  2>. 修改密码                      *\n");
 	printf("\t\t\t*                  0>. 退出                         *\n");
 	printf("\t\t\t*                                     欢迎使用本系统!*\n");
 	printf("\t\t\t=====================================================\n");

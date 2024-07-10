@@ -7,7 +7,11 @@
 
 int input_count_page();
 char *navigate_question_bank(const char *path);
+void display_score(double score);
+void display_question_count(int question_count);
+void display_correct_count(int correct_count);
 void display_question(const char *question);
+void display_final_result(double score, int question_count, int correct_count);
 void display_options(const char **options, int n_options, int highlight, int *selected_flags, int is_multiple_choice);
 char *get_user_choice(const char **options, int n_options, int highlight, int *selected_flags, int is_multiple_choice);
 void display_user_choice(const char *user_choice, bool is_correct);

@@ -44,6 +44,7 @@ int main(int argc, char *argv[])
             break;
         case 'e':
             backend_mode = 4;
+            break;
         default:
             fprintf(stderr, "Usage: %s [-b for backend mode] [-t for TUI mode] [-g for better TUI mode] [-m for manage mode] [-e for exercise management mode]\n", argv[0]);
             return 1;

@@ -34,6 +34,8 @@ void run_backend_mode()
  */
 void run_better_tui_mode()
 {
+    
+    correct_count = 0;
     char *selected_file = navigate_question_bank(QUESTION_BANK_PATH);
     if (selected_file == NULL)
     {
@@ -54,6 +56,8 @@ void run_better_tui_mode()
         process_question(question);
         free_question(&question);
     }
+    score = INIT_SCORE * correct_count / count;
+    display_final_result(score, count, correct_count);
 }
 
 /**
@@ -74,12 +78,11 @@ void run_tui_mode()
     printf("\033[32m题库加载成功\033[0m\n");
     double score = INIT_SCORE;
     printf("\033[1m请选择你要多少道题目:\033[0m");
-    int count;
-    scanf("%d", &count);
+    scanf("%d", &question_count);
 
-    int questions_to_display = count;
+    int questions_to_display = question_count;
     int question_bank_size = cJSON_GetArraySize(question_bank);
-    int correct_count = 0;
+    correct_count = 0;
     for (int i = 0; i < questions_to_display; i++)
     {
         int index = rand() % question_bank_size;
@@ -90,8 +93,8 @@ void run_tui_mode()
         }
     }
     printf("\033[32m正确答题数：%d\n\033[0m", correct_count); // 绿色
-    printf("\033[34m总题数：%d\n\033[0m", count);             // 蓝色
-    double final_score = score * correct_count / count;
+    printf("\033[34m总题数：%d\n\033[0m", question_count);             // 蓝色
+    double final_score = score * correct_count / question_count;
     printf("\033[35m最终得分：%.2f\n\033[0m", final_score); // 紫色
     cJSON_Delete(question_bank);
 }
@@ -160,6 +163,73 @@ void run_exercise_management_mode()
     strcpy(db.ExerciseName, "ExampleDB");
     strcpy(db.CreatorName, "Creator");
     exerciseMenu();
+    int choice;
+    while (1)
+    {
+        printf("请选择操作：");
+        scanf("%d", &choice);
+        if (choice == 7)
+            break;
 
+        int index;
+        Exercise exercise;
+        switch (choice)
+        {
+        case 1:
+            printf("输入章节：");
+            scanf(" %[^\n]", exercise.chapter);
+            printf("输入题型（单选题/多选题/判断题）：");
+            scanf(" %[^\n]", exercise.type);
+            printf("输入题干：");
+            scanf(" %[^\n]", exercise.question);
+            for (int i = 0; i < 4; i++)
+            {
+                printf("输入选项 %c：", 'A' + i);
+                scanf(" %[^\n]", exercise.choices[i]);
+            }
+            printf("输入标准答案（A/B/C/D）：");
+            scanf(" %c", &exercise.answer);
+            addExercise(&db, exercise);
+            break;
+        case 2:
+            printf("输入要删除的题号：");
+            scanf("%d", &index);
+            deleteExercise(&db, index - 1);
+            break;
+        case 3:
+            printf("输入要修改的题号：");
+            scanf("%d", &index);
+            printf("输入章节：");
+            scanf(" %[^\n]", exercise.chapter);
+            printf("输入题干：");
+            scanf(" %[^\n]", exercise.question);
+            for (int i = 0; i < 4; i++)
+            {
+                printf("输入选项 %c：", 'A' + i);
+                scanf(" %[^\n]", exercise.choices[i]);
+            }
+            printf("输入标准答案（A/B/C/D）：");
+            scanf(" %c", &exercise.answer);
+            modifyExercise(&db, index - 1, exercise);
+            break;
+        case 4:
+            printf("输入要查询的题号：");
+            scanf("%d", &index);
+            queryExercise(&db, index - 1);
+            break;
+        case 5:
+            browseExercises(&db);
+            break;
+        case 6:
+            printf("输入生成试卷的题目数：");
+            int numQuestions;
+            scanf("%d", &numQuestions);
+            generateExercise(&db, numQuestions);
+            break;
+        default:
+            printf("无效选择\n");
+        }
 
+        saveExercises(db);
+    }
 }

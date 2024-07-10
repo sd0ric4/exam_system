@@ -10,6 +10,12 @@
 #include "student.h"
 #include "file_utils.h"
 
+// 全局变量，用于存储分数
+double score = 0;
+// 全局变量，用于存储题目总数
+int question_count = 0;
+// 全局变量，用于存储正确答题数
+int correct_count = 0;
 /**
  * @brief 读取题库
  */

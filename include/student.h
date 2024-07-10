@@ -4,6 +4,14 @@
 #include <microhttpd.h>
 #include <cjson/cJSON.h>
 #include <stdbool.h>
+
+// 定义结构体，用于存储答案
+typedef struct
+{
+    const char *user_answer;
+    const char *correct_answer;
+} Answer;
+
 // 函数声明
 void read_question_bank(char *path);
 void choose_question_bank(char *filename);
@@ -25,5 +33,11 @@ enum MHD_Result select_questions(struct MHD_Connection *connection, int count);
 #define PORT 8888
 // 题库
 extern cJSON *question_bank;
+// 全局变量，用于存储分数
+extern double score;
+// 全局变量，用于存储题目总数
+extern int question_count;
+// 全局变量，用于存储正确答题数
+extern int correct_count;
 
 #endif // STUDENT_H

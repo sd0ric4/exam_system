@@ -26,7 +26,7 @@ int main(int argc, char *argv[])
 
     // 解析命令行参数
     int opt;
-    while ((opt = getopt(argc, argv, "betgm")) != -1)
+    while ((opt = getopt(argc, argv, "btgmeh")) != -1)
     {
         switch (opt)
         {
@@ -45,6 +45,9 @@ int main(int argc, char *argv[])
         case 'e':
             backend_mode = 4;
             break;
+        case 'h':
+            fprintf(stderr, "Usage: %s [-b for backend mode] [-t for TUI mode] [-g for better TUI mode] [-m for manage mode] [-e for exercise management mode]\n", argv[0]);
+            return 1;
         default:
             fprintf(stderr, "Usage: %s [-b for backend mode] [-t for TUI mode] [-g for better TUI mode] [-m for manage mode] [-e for exercise management mode]\n", argv[0]);
             return 1;
@@ -67,7 +70,7 @@ int main(int argc, char *argv[])
     {
         run_exercise_management_mode();
     }
-    else
+    else if (backend_mode == 0)
     {
         run_tui_mode();
     }

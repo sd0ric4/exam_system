@@ -18,5 +18,6 @@ void process_question(Question question);
 void studentMenu();
 void teacherMenu();
 void mainMenu();
+void exerciseMenu();
 
 #endif // UI_H

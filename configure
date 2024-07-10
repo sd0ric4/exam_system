@@ -39,7 +39,6 @@ check_library() {
     fi
 }
 
-check_library "cjson/cJSON.h"
 check_library "ncurses.h"
 check_library "microhttpd.h"
 

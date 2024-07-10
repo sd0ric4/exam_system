@@ -38,3 +38,8 @@ Makefile
 test
 test.*
 test_*
+
+obj/
+bin/
+*.suo
+*.o

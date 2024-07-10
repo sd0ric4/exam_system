@@ -1,4 +1,5 @@
 #include "manage.h"
+#include "mode.h"
 #include "ui.h"
 #include <stdio.h>
 #include <stdlib.h>
@@ -178,15 +179,20 @@ void ListDelete(STU *L) {
     }
 }
 
+void printHeader() {
+    printf("| %-39s | %-17s | %-6s | %-4s | %-19s | %-12s | %-19s |\n", 
+           "name", "identityCard", "gender", "age", "studentNumber", "answerTimes", "password");
+}
+
 void printstu(STU *p) {
-    printf("%s\t", p->name);
-    printf("\t%s", p->no);
-    printf("\t%d", p->xb);
-    printf("\t%d", p->age);
-    printf("\t%s", p->sch_num);
-    printf("\t%d", p->countStuents);
-    printf("\t\t%s", p->password);
-    printf("\n");
+    printf("| %-39s | %-17s | %-6s | %-4d | %-19s | %-12d | %-19s |\n",
+           p->name,
+           p->no,
+           p->xb == 0 ? "female" : "male",
+           p->age,
+           p->sch_num,
+           p->countStuents,
+           p->password);
 }
 
 void ListSearch(STU *L) {
@@ -205,7 +211,7 @@ void ListSearch(STU *L) {
             }
         }
         printf("您要查找的考生信息如下：\n");
-        printf("姓名\t\t身份证号\t\t性别\t年龄\t学号\t\t答题次数\t密码\n");
+        printHeader();
         printstu(p);
     }
 }
@@ -372,6 +378,7 @@ void studentmodel(cJSON *root, STU *L) {
         switch (item) {
         case 1:
             // 添加答题功能代码
+            run_better_tui_mode();
             break;
         case 2:
             changepassword(p);
@@ -440,7 +447,7 @@ void teachermodel(cJSON *root, STU *L) {
             break;
         case 2:
             printf("全部考生信息如下:\n");
-            printf("姓名\t\t身份证号\t\t性别\t年龄\t学号\t\t答题次数\t密码\n");
+            printHeader();
             Output(L);
             getchar();
             printf("\n请按任意键返回主菜单\n");

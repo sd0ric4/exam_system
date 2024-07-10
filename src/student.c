@@ -10,8 +10,15 @@
 #include "student.h"
 #include "file_utils.h"
 
+/**
+ * @brief 读取题库
+ */
 cJSON *question_bank = NULL;
 
+/**
+ * @brief 读取题库
+ * @param path 题库路径
+ */
 void read_question_bank(char *path)
 {
     DIR *dir;
@@ -36,6 +43,10 @@ void read_question_bank(char *path)
     closedir(dir);
 }
 
+/**
+ * @brief 选择题库
+ * @param filename 文件名
+ */
 void choose_question_bank(char *filename)
 {
     question_bank = load_question_bank(filename);
@@ -46,6 +57,12 @@ void choose_question_bank(char *filename)
     }
 }
 
+/**
+ * @brief 选择题目
+ * @param questions 题库
+ * @param count 题目数量
+ * @param selected_questions 选择的题目
+ */
 void select_random_questions(cJSON *questions, int count, cJSON *selected_questions)
 {
     for (int i = 0; i < count; i++)
@@ -56,6 +73,11 @@ void select_random_questions(cJSON *questions, int count, cJSON *selected_questi
     }
 }
 
+/**
+ * @brief 显示问题并获取答案
+ * @param question 问题
+ * @return 是否回答正确
+ */
 bool display_question_and_get_answer(cJSON *question)
 {
     printf("\033[1m%s\033[0m \n\033[31m%s\033[0m\n", cJSON_GetObjectItem(question, "type")->valuestring, cJSON_GetObjectItem(question, "title")->valuestring);
@@ -81,6 +103,12 @@ bool display_question_and_get_answer(cJSON *question)
     return compare_answers_and_score(question, user_answer);
 }
 
+/**
+ * @brief 比较答案并计分
+ * @param question 问题
+ * @param user_answer 用户答案
+ * @return 是否回答正确
+ */
 bool compare_answers_and_score(cJSON *question, const char *user_answer)
 {
     bool is_correct = false;
@@ -112,6 +140,12 @@ bool compare_answers_and_score(cJSON *question, const char *user_answer)
     return is_correct;
 }
 
+/**
+ * @brief 选择题目
+ * @param connection 连接
+ * @param count 题目数量
+ * @return 状态码
+ */
 enum MHD_Result answer_question(struct MHD_Connection *connection, const char *question_id, const char *answer)
 {
     cJSON *question = cJSON_GetArrayItem(question_bank, atoi(question_id));
@@ -135,6 +169,12 @@ enum MHD_Result answer_question(struct MHD_Connection *connection, const char *q
     return MHD_queue_response(connection, MHD_HTTP_OK, MHD_create_response_from_buffer(strlen(response), (void *)response, MHD_RESPMEM_MUST_COPY));
 }
 
+/**
+ * @brief 选择题目
+ * @param connection 连接
+ * @param count 题目数量
+ * @return 状态码
+ */
 enum MHD_Result select_questions(struct MHD_Connection *connection, int count)
 {
     cJSON *selected_questions = cJSON_CreateArray();
@@ -150,6 +190,18 @@ enum MHD_Result select_questions(struct MHD_Connection *connection, int count)
     return ret;
 }
 
+/**
+ * @brief 处理请求
+ * @param cls 类
+ * @param connection 连接
+ * @param url URL
+ * @param method 方法
+ * @param version 版本
+ * @param upload_data 上传数据
+ * @param upload_data_size 上传数据大小
+ * @param con_cls 类连接
+ * @return 状态码
+ */
 enum MHD_Result handle_request(void *cls, struct MHD_Connection *connection,
                                const char *url, const char *method,
                                const char *version, const char *upload_data,

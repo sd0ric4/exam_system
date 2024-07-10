@@ -5,7 +5,11 @@
 #include <stdlib.h>
 #include <string.h>
 
-// 创建表头，初始化链表
+/**
+ * @brief 创建表头，初始化链表
+ * @param L 链表头指针
+ * @return STU* 返回链表头指针
+ */
 STU *ListInit(STU *L) {
     STU *head = NULL;
     head = (STU *)malloc(sizeof(STU));
@@ -13,7 +17,11 @@ STU *ListInit(STU *L) {
     L = head;
     return L;
 }
-
+/**
+ * @brief 添加学生信息到json
+ * @param root json根节点
+ * @param stu 学生信息
+ */
 void add_student_to_json(cJSON *root, STU *stu) {
     cJSON *student = cJSON_CreateObject();
     cJSON_AddStringToObject(student, "name", stu->name);
@@ -26,6 +34,12 @@ void add_student_to_json(cJSON *root, STU *stu) {
     cJSON_AddItemToArray(root, student);
 }
 
+/**
+ * @brief 从json中读取学生信息
+ * @param root json根节点
+ * @param rootNum json根节点的数量
+ * @param L 链表头指针
+ */
 void read_student_from_json(cJSON *root, int rootNum, STU *L) {
     for (int i = 0; i < rootNum; i++) {
         STU *stu = (STU *)malloc(sizeof(STU));
@@ -42,6 +56,12 @@ void read_student_from_json(cJSON *root, int rootNum, STU *L) {
     }
 }
 
+/**
+ * @brief 保存链表到json
+ * @param root json根节点
+ * @param L 链表头指针
+ * @return cJSON* 返回json根节点
+ */
 cJSON *saveRoot(cJSON *root, STU *L) {
     STU *p = L->next;
     cJSON_Delete(root);
@@ -53,6 +73,10 @@ cJSON *saveRoot(cJSON *root, STU *L) {
     return root;
 }
 
+/**
+ * @brief 保存学生信息到文件
+ * @param root json根节点
+ */
 void save_students_to_file(cJSON *root) {
     FILE *file = fopen("student.json", "w");
     if (!file) {
@@ -65,6 +89,11 @@ void save_students_to_file(cJSON *root) {
     fclose(file);
 }
 
+/**
+ * @brief 从文件中读取学生信息
+ * @param filename 文件名
+ * @return cJSON* 返回json根节点
+ */
 cJSON *read_students_from_file(char *filename) {
     FILE *file = fopen(filename, "r");
     if (!file) {
@@ -85,6 +114,12 @@ cJSON *read_students_from_file(char *filename) {
     return root;
 }
 
+/**
+ * @brief 判断学生是否存在
+ * @param L 链表头指针
+ * @param sch_num 学号
+ * @return true/false
+ */
 bool stuExist(STU *L, char *sch_num) {
     STU *p = L->next;
     while (p != NULL) {
@@ -96,7 +131,12 @@ bool stuExist(STU *L, char *sch_num) {
     return false;
 }
 
-// 创建链表，将新生成的节点插入到链表的表头
+/**
+ * @brief 创建链表，将新生成的节点插入到链表的表头
+ * @param L 链表头指针
+ * @param n 学生数量
+ * @return STU* 返回链表头指针
+ */
 STU *ListCreate(STU *L, int n) {
     int i;
     for (i = 0; i < n; i++) {
@@ -114,7 +154,10 @@ STU *ListCreate(STU *L, int n) {
     return L;
 }
 
-// 对链表进行节点的插入操作
+/**
+ * @brief 对链表进行节点的插入操作
+ * @param L 链表头指针
+ */
 void ListInsert(STU *L) {
     STU *s = NULL;
     STU *p = L->next;
@@ -140,7 +183,10 @@ void ListInsert(STU *L) {
     L->next = s;
 }
 
-// 对链表的进行节点的删除操作
+/**
+ * @brief 对链表的进行节点的删除操作
+ * @param L 链表头指针
+ */
 void ListDelete(STU *L) {
     char n[40];
     char choose;
@@ -178,12 +224,18 @@ void ListDelete(STU *L) {
         }
     }
 }
-
+/**
+ * @brief 打印表头
+ */
 void printHeader() {
     printf("| %-39s | %-17s | %-6s | %-4s | %-19s | %-12s | %-19s |\n", 
            "name", "identityCard", "gender", "age", "studentNumber", "answerTimes", "password");
 }
 
+/**
+ * @brief 打印学生信息
+ * @param p 学生信息
+ */
 void printstu(STU *p) {
     printf("| %-39s | %-17s | %-6s | %-4d | %-19s | %-12d | %-19s |\n",
            p->name,
@@ -195,6 +247,10 @@ void printstu(STU *p) {
            p->password);
 }
 
+/**
+ * @brief 对链表进行查找操作
+ * @param L 链表头指针
+ */
 void ListSearch(STU *L) {
     char n[40];
     STU *p = L->next;
@@ -216,6 +272,10 @@ void ListSearch(STU *L) {
     }
 }
 
+/**
+ * @brief 对链表进行修改操作
+ * @param L 链表头指针
+ */
 void ListModify(STU *L) {
     int x, a, item;
     int flag = 1;
@@ -285,6 +345,13 @@ void ListModify(STU *L) {
     }
 }
 
+/**
+ * @brief 输入学生信息
+ * @param p 学生信息
+ * @param i 序号
+ * @param L 链表头指针
+ * @return true/false
+ */
 bool Input(STU *p, int i, STU *L) {
     printf("请输入第%d名考生的学号:", i + 1);
     scanf("%s", p->sch_num);
@@ -310,6 +377,10 @@ bool Input(STU *p, int i, STU *L) {
     return true;
 }
 
+/**
+ * @brief 输出学生信息
+ * @param L 链表头指针
+ */
 void Output(STU *L) {
     STU *p = L->next;
     while (p != NULL) {
@@ -318,6 +389,11 @@ void Output(STU *L) {
     }
 }
 
+/**
+ * @brief 学生模式
+ * @param root json根节点
+ * @param L 链表头指针
+ */
 void changepassword(STU *p) {
     char password[20];
     printf("请输入旧密码:");
@@ -334,6 +410,11 @@ void changepassword(STU *p) {
     }
 }
 
+/**
+ * @brief 学生模式
+ * @param root json根节点
+ * @param L 链表头指针
+ */
 void studentmodel(cJSON *root, STU *L) {
     int item;
     char num[20];
@@ -405,6 +486,11 @@ void studentmodel(cJSON *root, STU *L) {
     } while (item);
 }
 
+/**
+ * @brief 管理员模式
+ * @param root json根节点
+ * @param L 链表头指针
+ */
 void teachermodel(cJSON *root, STU *L) {
     int item, n;
     char nam[30];

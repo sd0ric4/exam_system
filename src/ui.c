@@ -6,6 +6,11 @@
 #include <stdio.h>
 
 #define MAX_DISPLAY 5
+
+/**
+ * @brief 输入题量
+ * @return 题量
+ */
 int input_count_page() {
     initscr();
     noecho();
@@ -39,6 +44,11 @@ int input_count_page() {
     return count;
 }
 
+/**
+ * @brief 浏览题库
+ * @param path 题库路径
+ * @return 选择的题库文件名
+ */
 char *navigate_question_bank(const char *path) {
     DIR *dir;
     struct dirent *ptr;
@@ -128,12 +138,24 @@ char *navigate_question_bank(const char *path) {
     }
 }
 
+/**
+ * @brief 显示题目
+ * @param question 题目
+ */
 void display_question(const char *question) {
     attron(A_BOLD);
     mvprintw(2, 5, "%s", question);
     attroff(A_BOLD);
 }
 
+/**
+ * @brief 显示选项
+ * @param options 选项
+ * @param n_options 选项数量
+ * @param highlight 当前高亮选项
+ * @param selected_flags 选中标志
+ * @param is_multiple_choice 是否多选
+ */
 void display_options(const char **options, int n_options, int highlight, int *selected_flags, int is_multiple_choice) {
     const char labels[] = {'A', 'B', 'C', 'D'};
     for (int i = 0; i < n_options; ++i) {
@@ -148,6 +170,15 @@ void display_options(const char **options, int n_options, int highlight, int *se
     }
 }
 
+/**
+ * @brief 获取用户选择
+ * @param options 选项
+ * @param n_options 选项数量
+ * @param highlight 当前高亮选项
+ * @param selected_flags 选中标志
+ * @param is_multiple_choice 是否多选
+ * @return 用户选择
+ */
 char *get_user_choice(const char **options, int n_options, int highlight, int *selected_flags, int is_multiple_choice) {
     int choice;
     static char user_choice[256] = "";
@@ -185,6 +216,11 @@ char *get_user_choice(const char **options, int n_options, int highlight, int *s
     }
 }
 
+/**
+ * @brief 显示用户选择
+ * @param user_choice 用户选择
+ * @param is_correct 是否正确
+ */
 void display_user_choice(const char *user_choice, bool is_correct) {
     start_color();
     init_pair(1, COLOR_RED, COLOR_BLACK);
@@ -205,6 +241,10 @@ void display_user_choice(const char *user_choice, bool is_correct) {
     }
 }
 
+/**
+ * @brief 显示答案
+ * @param answer 正确答案
+ */
 void display_answer(const char *answer) {
     start_color();
     init_pair(2, COLOR_GREEN, COLOR_BLACK);
@@ -221,6 +261,12 @@ void display_answer(const char *answer) {
     attroff(COLOR_PAIR(2));
 }
 
+/**
+ * @brief 比较答案
+ * @param user_choice 用户选择
+ * @param answer 正确答案
+ * @return 是否正确
+ */
 bool compare_answers_tui(const char *user_choice, const char *answer) {
     if (strcmp(answer, "对") == 0) {
         answer = "A";
@@ -230,6 +276,10 @@ bool compare_answers_tui(const char *user_choice, const char *answer) {
     return strcmp(user_choice, answer) == 0;
 }
 
+/**
+ * @brief 显示结果
+ * @param is_correct 是否正确
+ */
 void display_result(bool is_correct) {
     start_color();
     init_pair(1, COLOR_RED, COLOR_BLACK);
@@ -245,6 +295,10 @@ void display_result(bool is_correct) {
     }
 }
 
+/**
+ * @brief 处理问题
+ * @param question 问题
+ */
 void process_question(Question question) {
     initscr();
     noecho();
@@ -278,6 +332,9 @@ void process_question(Question question) {
     clear();
 }
 
+/**
+ * @brief 学生菜单
+ */
 void studentMenu() {
     printf("\n\n");
     printf("\t\t\t=======================考试系统=======================\n");
@@ -290,6 +347,9 @@ void studentMenu() {
     printf("\t\t\t输入选项，按回车进入选项:                              \n");
 }
 
+/**
+ * @brief 教师菜单
+ */
 void teacherMenu() {
     printf("\n\n");
     printf("\t\t\t=======================考试系统======================\n");
@@ -307,6 +367,9 @@ void teacherMenu() {
     printf("\t\t\t输入选项，按回车进入选项:                             \n");
 }
 
+/**
+ * @brief 主菜单
+ */
 void mainMenu() {
     printf("\n\n");
     printf("\t\t\t=======================考试系统======================\n");
@@ -319,6 +382,9 @@ void mainMenu() {
     printf("\t\t\t输入选项，按回车进入选项:                             \n");
 }
 
+/**
+ * @brief 试题菜单
+ */
 void exerciseMenu() {
     printf("\n\n");
     printf("\t\t\t=======================题库管理系统======================\n");

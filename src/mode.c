@@ -2,6 +2,7 @@
 #include "manage.h"
 #include "question.h"
 #include "ui.h"
+#include "exercise.h"
 #include "file_utils.h"
 #include "student.h"
 #include <time.h>
@@ -12,10 +13,14 @@
 
 #define QUESTION_BANK_PATH "./QuestionBank"
 #define PORT 8888
-
-void run_backend_mode() {
+/**
+ * @brief 运行后端模式
+ */
+void run_backend_mode()
+{
     struct MHD_Daemon *daemon = MHD_start_daemon(MHD_USE_SELECT_INTERNALLY, PORT, NULL, NULL, &handle_request, NULL, MHD_OPTION_END);
-    if (NULL == daemon) {
+    if (NULL == daemon)
+    {
         printf("Failed to start HTTP server.\n");
         exit(1);
     }
@@ -24,10 +29,14 @@ void run_backend_mode() {
     getchar();
     MHD_stop_daemon(daemon);
 }
-
-void run_better_tui_mode() {
+/**
+ * @brief 运行更好的TUI模式
+ */
+void run_better_tui_mode()
+{
     char *selected_file = navigate_question_bank(QUESTION_BANK_PATH);
-    if (selected_file == NULL) {
+    if (selected_file == NULL)
+    {
         fprintf(stderr, "题库选择失败\n");
         exit(1);
     }
@@ -39,14 +48,19 @@ void run_better_tui_mode() {
     cJSON *selected_questions = select_questions_randomly(count, question_bank);
     const cJSON *questionItem = NULL;
 
-    cJSON_ArrayForEach(questionItem, selected_questions) {
+    cJSON_ArrayForEach(questionItem, selected_questions)
+    {
         Question question = parse_question_from_cjson(questionItem);
         process_question(question);
         free_question(&question);
     }
 }
 
-void run_tui_mode() {
+/**
+ * @brief 运行TUI模式
+ */
+void run_tui_mode()
+{
     read_question_bank(QUESTION_BANK_PATH);
     printf("\033[1m请输入题库名:\033[0m\n");
     char full_path[512]; // 假设这个大小足够存储 QUESTION_BANK_PATH 和 filename 的连接
@@ -66,10 +80,12 @@ void run_tui_mode() {
     int questions_to_display = count;
     int question_bank_size = cJSON_GetArraySize(question_bank);
     int correct_count = 0;
-    for (int i = 0; i < questions_to_display; i++) {
+    for (int i = 0; i < questions_to_display; i++)
+    {
         int index = rand() % question_bank_size;
         cJSON *question = cJSON_GetArrayItem(question_bank, index);
-        if (display_question_and_get_answer(question)) {
+        if (display_question_and_get_answer(question))
+        {
             correct_count++;
         }
     }
@@ -80,17 +96,26 @@ void run_tui_mode() {
     cJSON_Delete(question_bank);
 }
 
-void run_manage_mode() {
-        int model; // model用于接收登陆身份
+/**
+ * @brief 运行学生模式
+ */
+void run_manage_mode()
+{
+    int model; // model用于接收登陆身份
     STU *L = NULL;
     L = ListInit(L);
     char *filename = "student.json";
     cJSON *root = read_students_from_file(filename);
-    if (!root) {
+    if (!root)
+    {
         root = cJSON_CreateArray();
-    } else if (cJSON_IsArray(root)) {
+    }
+    else if (cJSON_IsArray(root))
+    {
         // 已经有数据，直接使用
-    } else {
+    }
+    else
+    {
         // 错误：不是数组
         cJSON_Delete(root);
         root = cJSON_CreateArray();
@@ -99,12 +124,14 @@ void run_manage_mode() {
     int rootNum = cJSON_GetArraySize(root);
     read_student_from_json(root, rootNum, L);
 
-    do {
+    do
+    {
         mainMenu();
         scanf("%d", &model);
         getchar();
         system("clear");
-        switch (model) {
+        switch (model)
+        {
         case 1:
             teachermodel(root, L);
             break;
@@ -120,4 +147,19 @@ void run_manage_mode() {
             break;
         }
     } while (model);
+}
+
+/**
+ * @brief 运行练习管理模式
+ */
+void run_exercise_management_mode()
+{
+    setlocale(LC_ALL, "");
+
+    ExerciseDataBase db = {0}; // 初始化数据库
+    strcpy(db.ExerciseName, "ExampleDB");
+    strcpy(db.CreatorName, "Creator");
+    exerciseMenu();
+
+
 }

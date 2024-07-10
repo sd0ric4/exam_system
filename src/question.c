@@ -4,6 +4,11 @@
 #include <string.h>
 #include <time.h>
 
+/**
+ * @brief 从文件中加载题库
+ * @param filename 文件名
+ * @return 题库的 cJSON 对象
+ */
 void shuffle_array(cJSON **array, int n) {
     if (array == NULL || n <= 0) {
         fprintf(stderr, "打乱数组时出错\n");
@@ -21,6 +26,12 @@ void shuffle_array(cJSON **array, int n) {
     }
 }
 
+/**
+ * @brief 从题库中随机选择题目
+ * @param count 题目数量
+ * @param questions 题库
+ * @return 随机选择的题目
+ */
 cJSON *select_questions_randomly(int count, cJSON *questions) {
     cJSON *selected_questions = cJSON_CreateArray();
     int n_questions = cJSON_GetArraySize(questions);
@@ -48,6 +59,11 @@ cJSON *select_questions_randomly(int count, cJSON *questions) {
     return selected_questions;
 }
 
+/**
+ * @brief 从 cJSON 对象中解析题目
+ * @param questionItem 题目的 cJSON 对象
+ * @return 解析出的题目
+ */
 Question parse_question_from_cjson(const cJSON *questionItem) {
     Question question;
     const cJSON *title = cJSON_GetObjectItem(questionItem, "title");
@@ -78,6 +94,10 @@ Question parse_question_from_cjson(const cJSON *questionItem) {
     return question;
 }
 
+/**
+ * @brief 释放题目的内存
+ * @param question 题目
+ */
 void free_question(Question *question) {
     free(question->title);
     free(question->correctAnswer);

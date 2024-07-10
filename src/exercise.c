@@ -1,4 +1,5 @@
 #include "exercise.h"
+#include "student.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -8,7 +9,10 @@
 // 真实数据库TrueDB
 static ExerciseDataBase TrueDB;
 
-//初始化数据库
+/**
+ * @brief 初始化数据库
+ * @param db 数据库
+ */
 void initialDB(ExerciseDataBase db) {
     // 复制ExerciseDataBase的基本信息
     strcpy(TrueDB.ExerciseName, db.ExerciseName);
@@ -27,7 +31,10 @@ void initialDB(ExerciseDataBase db) {
     }
 }
 
-// 添加试题
+/**
+ * @brief 添加试题
+ * @param db 数据库
+ */
 void addExercise(ExerciseDataBase *db, Exercise exercise) {
     if (db->ExerciseSum >= UpperLimit) {
         printf("题库数目已达上限\n");
@@ -46,7 +53,11 @@ void addExercise(ExerciseDataBase *db, Exercise exercise) {
     db->ExerciseSum++;
 }
 
-// 删除试题
+/**
+ * @brief 删除试题
+ * @param db 数据库
+ * @param index 题号
+ */
 void deleteExercise(ExerciseDataBase *db, int index) {
     if (index < 0 || index >= db->ExerciseSum) {
         printf("题号错误！删除失败\n");
@@ -58,7 +69,11 @@ void deleteExercise(ExerciseDataBase *db, int index) {
     db->ExerciseSum--;
 }
 
-// 修改试题
+/**
+ * @brief 修改试题
+ * @param db 数据库
+ * @param index 题号
+ */
 void modifyExercise(ExerciseDataBase *db, int index, Exercise exercise) {
     if (index < 0 || index >= db->ExerciseSum) {
         printf("题号错误！修改失败\n");
@@ -77,13 +92,20 @@ void modifyExercise(ExerciseDataBase *db, int index, Exercise exercise) {
     db->SetOfExercise[index].answer = exercise.answer;
 }
 
-// 保存试题（增 删 改 需要保存）
+/**
+ * @brief 保存试题
+ * @param db 数据库
+ */
 void saveExercises(ExerciseDataBase db) {
     initialDB(db);
     printf("题库已保存\n");
 }
 
-// 查询试题
+/**
+ * @brief 查询试题
+ * @param db 数据库
+ * @param index 题号
+ */
 void queryExercise(const ExerciseDataBase *db, int index) {
     if (index < 0 || index >= db->ExerciseSum) {
         printf("题号错误！查询失败\n");
@@ -98,19 +120,31 @@ void queryExercise(const ExerciseDataBase *db, int index) {
     printf("正确答案: %c\n", db->SetOfExercise[index].answer);
 }
 
-// 浏览所有试题
+/**
+ * @brief 浏览试题
+ * @param db 数据库
+ */
 void browseExercises(const ExerciseDataBase *db) {
     for (int i = 0; i < db->ExerciseSum; i++) {
         queryExercise(db, i);
     }
 }
 
-// 生成随机整数，用于随机选择题目
+/**
+ * @brief 生成随机整数
+ * @param min 最小值
+ * @param max 最大值
+ */
 int randomInt(int min, int max) {
     return min + rand() % (max - min + 1);
 }
 
-// 检查数组中是否已包含某个值
+/**
+ * @brief 判断数组中是否包含某个值
+ * @param array 数组
+ * @param size 数组大小
+ * @param value 值
+ */
 int contains(int array[], int size, int value) {
     for (int i = 0; i < size; i++) {
         if (array[i] == value) return 1;
@@ -118,7 +152,12 @@ int contains(int array[], int size, int value) {
     return 0;
 }
 
-// 将试卷输出到文件
+/**
+ * @brief 将题目写入文件
+ * @param db 数据库
+ * @param filename 文件名
+ * @param numQuestions 题目数
+ */
 void writeQuestionsToFile(const ExerciseDataBase *db, const char *filename, int numQuestions) {
     FILE *file = fopen(filename, "w");
     if (!file) {
@@ -144,7 +183,13 @@ void writeQuestionsToFile(const ExerciseDataBase *db, const char *filename, int 
     fclose(file);
 }
 
-// 将答案输出到文件
+/**
+ * @brief 将答案写入文件
+ * @param db 数据库
+ * @param filename 文件名
+ * @param numQuestions 题目数
+ * @param selected 选中的题目
+ */
 void writeAnswersToFile(const ExerciseDataBase *db, const char *filename, int numQuestions, int selected[]) {
     FILE *file = fopen(filename, "w");
     if (!file) {
@@ -159,7 +204,11 @@ void writeAnswersToFile(const ExerciseDataBase *db, const char *filename, int nu
     fclose(file);
 }
 
-// 生成 JSON 文件
+/**
+ * @brief 生成 JSON 文件
+ * @param db 数据库
+ * @param filename 文件名
+ */
 void generateJsonFile(const ExerciseDataBase *db, const char *filename) {
     cJSON *jsonArray = cJSON_CreateArray();
 
@@ -196,7 +245,11 @@ void generateJsonFile(const ExerciseDataBase *db, const char *filename) {
     free(jsonString);
 }
 
-// 主组卷功能
+/**
+ * @brief 生成试卷
+ * @param db 数据库
+ * @param numQuestions 题目数
+ */
 void generateExercise(ExerciseDataBase *db, int numQuestions) {
     if (numQuestions > db->ExerciseSum) {
         printf("指定的题目数超过题库中的题目数\n");
@@ -218,9 +271,10 @@ void generateExercise(ExerciseDataBase *db, int numQuestions) {
     printf("答案文件名为: %s\n", AnswerFilename);
     printf("试卷和答案已分别生成并保存到文件\n");
 
-    // 生成 JSON 文件
+    // 生成 JSON 文件,到QUESTION_BANK_PATH目录下
     char JsonFilename[32];
-    sprintf(JsonFilename, "./QuestionBank/test_Exercise_%d.json", numQuestions);
+
+    sprintf(JsonFilename, "%s/%s.json", QUESTION_BANK_PATH, db->ExerciseName);
     generateJsonFile(db, JsonFilename);
     printf("试卷 JSON 文件名为: %s\n", JsonFilename);
 }

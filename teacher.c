@@ -1,4 +1,5 @@
 #include "exercise.h"
+#include "ui.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -32,15 +33,7 @@ int main(int argc, char *argv[]) {
     if (backend_mode) {
         printf("Backend mode not implemented in this version.\n");
     } else {
-        printf("题库管理系统\n");
-        printf("1. 添加试题\n");
-        printf("2. 删除试题\n");
-        printf("3. 修改试题\n");
-        printf("4. 查询试题\n");
-        printf("5. 浏览所有试题\n");
-        printf("6. 生成试卷\n");
-        printf("7. 退出\n");
-
+        exerciseMenu();
         int choice;
         while (1) {
             printf("请选择操作：");

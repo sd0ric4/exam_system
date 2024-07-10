@@ -4,6 +4,11 @@
 #include <string.h>
 #include <cjson/cJSON.h>
 
+/**
+ * @brief 从文件中加载题库
+ * @param filename 文件名
+ * @return 题库的 cJSON 对象
+ */
 cJSON *load_question_bank(const char *filename) {
     FILE *file = fopen(filename, "r");
     if (file == NULL) {

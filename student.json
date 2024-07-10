@@ -1,0 +1,17 @@
+[{
+		"name":	"happy",
+		"no":	"happy",
+		"xb":	1,
+		"age":	12,
+		"sch_num":	"happy",
+		"password":	"",
+		"countStuents":	0
+	}, {
+		"name":	"12",
+		"no":	"111",
+		"xb":	1,
+		"age":	11,
+		"sch_num":	"122",
+		"password":	"123456",
+		"countStuents":	0
+	}]

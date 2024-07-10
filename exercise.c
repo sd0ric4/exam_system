@@ -23,7 +23,6 @@ void initialDB(ExerciseDataBase db) {
             strcpy(TrueDB.SetOfExercise[i].choices[j], db.SetOfExercise[i].choices[j]);
         }
         TrueDB.SetOfExercise[i].answer = db.SetOfExercise[i].answer;
-        TrueDB.SetOfExercise[i].AMOUNT = db.SetOfExercise[i].AMOUNT;
         strcpy(TrueDB.SetOfExercise[i].type, db.SetOfExercise[i].type);
     }
 }

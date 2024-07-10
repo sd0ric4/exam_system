@@ -10,7 +10,6 @@ typedef struct 试题 {
     char question[256]; // 题干
     char choices[4][128]; // 四个选项
     char answer; // 标准答案，A/B/C/D
-    int AMOUNT; // 每个单选题五分
     char type[10]; // 题型
 } Exercise;
 

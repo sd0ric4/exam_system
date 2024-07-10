@@ -38,6 +38,7 @@ Makefile
 test
 test.*
 test_*
+teacher
 
 obj/
 bin/

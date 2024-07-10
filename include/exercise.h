@@ -1,7 +1,7 @@
 #ifndef EXERCISE_H
 #define EXERCISE_H
 
-#include <cjson/cJSON.h>
+#include "cJSON.h"
 
 #define UpperLimit 100 //试题题库默认题目上限
 

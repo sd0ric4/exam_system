@@ -7,7 +7,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <locale.h>
-#include <cjson/cJSON.h>
+#include "cJSON.h"
 
 int main(int argc, char *argv[])
 {

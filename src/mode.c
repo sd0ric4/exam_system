@@ -9,7 +9,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <locale.h>
-#include <cjson/cJSON.h>
+#include "cJSON.h"
 
 #define QUESTION_BANK_PATH "./QuestionBank"
 #define PORT 8888

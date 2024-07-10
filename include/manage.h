@@ -1,7 +1,7 @@
 #ifndef MANAGE_H
 #define MANAGE_H
 
-#include <cjson/cJSON.h>
+#include "cJSON.h"
 #include <stdbool.h>
 
 // 定义一个考生结构体

@@ -4,7 +4,7 @@
 #include <time.h>
 #include <string.h>
 #include <microhttpd.h>
-#include <cjson/cJSON.h>
+#include "cJSON.h"
 #include <locale.h>
 #include <dirent.h>
 #include "student.h"

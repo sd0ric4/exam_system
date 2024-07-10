@@ -8,6 +8,7 @@
 #include <locale.h>
 #include <dirent.h>
 #include "student.h"
+#include "file_utils.h"
 
 cJSON *question_bank = NULL;
 
@@ -43,31 +44,6 @@ void choose_question_bank(char *filename)
         printf("题库加载失败。\n");
         exit(1);
     }
-}
-
-cJSON *load_question_bank(const char *filename)
-{
-    FILE *fp = fopen(filename, "r");
-    if (fp == NULL)
-    {
-        perror("fopen");
-        return NULL;
-    }
-
-    fseek(fp, 0, SEEK_END);
-    long file_size = ftell(fp);
-    fseek(fp, 0, SEEK_SET);
-
-    char *file_content = (char *)malloc(file_size + 1);
-    fread(file_content, 1, file_size, fp);
-    file_content[file_size] = '\0';
-
-    cJSON *question_bank = cJSON_Parse(file_content);
-
-    free(file_content);
-    fclose(fp);
-
-    return question_bank;
 }
 
 void select_random_questions(cJSON *questions, int count, cJSON *selected_questions)

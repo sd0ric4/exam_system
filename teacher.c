@@ -63,7 +63,6 @@ int main(int argc, char *argv[]) {
                     }
                     printf("输入标准答案（A/B/C/D）：");
                     scanf(" %c", &exercise.answer);
-                    exercise.AMOUNT = 5;
                     addExercise(&db, exercise);
                     break;
                 case 2:

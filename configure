@@ -30,17 +30,7 @@ case $OS in
         ;;
 esac
 
-# 检查库是否可用
-check_library() {
-    echo "#include <$1>" | gcc -E - > /dev/null 2>&1
-    if [ $? -ne 0 ]; then
-        echo "Error: $1 library is not installed. Please install $1."
-        exit 1
-    fi
-}
 
-check_library "ncurses.h"
-check_library "microhttpd.h"
 
 # 生成Makefile
 echo "Generating Makefile for $OS..."

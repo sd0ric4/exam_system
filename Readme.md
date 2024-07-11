@@ -19,10 +19,94 @@
 ./configure
 make
 ```
+## 项目结构
+```bash
+.
+├── build
+│   └── Debug
+├── configure
+├── Docs
+│   └── 代码解释.md
+├── include
+│   ├── cJSON.h
+│   ├── exercise.h
+│   ├── file_utils.h
+│   ├── manage.h
+│   ├── microhttpd.h
+│   ├── mode.h
+│   ├── ncurses.h
+│   ├── question.h
+│   ├── student.h
+│   └── ui.h
+├── main
+├── Makefile
+├── obj
+│   ├── exercise.o
+│   ├── file_utils.o
+│   ├── main.o
+│   ├── manage.o
+│   ├── mode.o
+│   ├── question.o
+│   ├── student.o
+│   └── ui.o
+├── QuestionBank
+│   ├── ch10.json
+│   ├── ch11.json
+│   ├── ch12.json
+│   ├── ch13.json
+│   ├── ch14.json
+│   ├── ch15.json
+│   ├── ch16.json
+│   ├── ch17.json
+│   ├── ch1.json
+│   ├── ch2.json
+│   ├── ch3.json
+│   ├── ch4.json
+│   ├── ch5.json
+│   ├── ch6.json
+│   ├── ch7.json
+│   ├── ch8.json
+│   ├── ch9.json
+│   ├── ExampleDB.json
+│   └── test_Exercise_1.json
+├── Readme.md
+├── src
+│   ├── exercise.c
+│   ├── file_utils.c
+│   ├── main.c
+│   ├── manage.c
+│   ├── mode.c
+│   ├── question.c
+│   ├── student.c
+│   └── ui.c
+└── student.json
+```
 
-## 构思
-希望以json的形式存储数据，方便读写。
+- `src` 存放源代码
+- `include` 存放头文件
+- `obj` 存放编译生成的目标文件
+- `build` 存放编译生成的可执行文件
+- `QuestionBank` 存放题库
+- `student.json` 存放学生信息
+- `configure` 生成Makefile的脚本
+- `Makefile` 用于编译项目
+- `main` 可执行文件
+- `Docs` 存放文档
+- `Readme.md` 项目说明
 
-希望能写个后端接口
+## 模块解释
+
+### `file_utils` 文件操作模块
+
+[`file_utils` 文件操作模块](Docs/模块解释/file_utils.md)
+
+### `question` 试题模块
+
+[`question` 试题模块](Docs/模块解释/question.md)
+
+### `exercise` 练习模块
+
+[`exercise` 练习模块](Docs/模块解释/exercise.md)
+
 
 

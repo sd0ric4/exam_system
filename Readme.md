@@ -108,5 +108,19 @@ make
 
 [`exercise` 练习模块](Docs/模块解释/exercise.md)
 
+### `student` 学生模块
 
+[`student` 学生模块](Docs/模块解释/student.md)
+
+### `manage` 管理员模块
+
+[`manage` 管理员模块](Docs/模块解释/manage.md)
+
+### `ui` 用户界面模块
+
+[`ui` 用户界面模块](Docs/模块解释/ui.md)
+
+### `mode` 模式模块
+
+[`mode` 模式模块](Docs/模块解释/mode.md)
 

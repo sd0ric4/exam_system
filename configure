@@ -16,8 +16,15 @@ fi
 # 检查操作系统并配置相应的变量
 OS="$(uname)"
 case $OS in
-    'Linux' | 'Darwin')
+    'Linux')
         RM="rm -f"
+        ;;
+    'Darwin')
+        RM="rm -f"
+        # 获取 Homebrew 前缀
+        BREW_PREFIX=$(brew --prefix)
+        CFLAGS="-Iinclude -I${BREW_PREFIX}/include"
+        LDFLAGS="-L${BREW_PREFIX}/lib -lncurses -lcjson -lmicrohttpd"
         ;;
     'WindowsNT')
         RM="del /Q"
@@ -29,8 +36,6 @@ case $OS in
         exit 1
         ;;
 esac
-
-
 
 # 生成Makefile
 echo "Generating Makefile for $OS..."

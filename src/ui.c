@@ -231,6 +231,8 @@ void display_final_result(double score, int question_count, int correct_count)
 
     getch();
     clear();
+    endwin();
+    system("clear");
 }
 /**
  * @brief 显示选项

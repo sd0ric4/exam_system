@@ -4,7 +4,7 @@
 CFLAGS="-Iinclude"
 LDFLAGS="-lncurses -lcjson -lmicrohttpd"
 RM=""
-TARGET="main"
+TARGET="exam_system"
 
 # 检查gcc是否安装
 if ! command -v gcc &> /dev/null
@@ -29,7 +29,7 @@ case $OS in
     'WindowsNT')
         RM="del /Q"
         CFLAGS="$CFLAGS -lws2_32"
-        TARGET="main.exe"
+        TARGET="exam_system.exe"
         ;;
     *)
         echo "Unsupported OS: $OS"

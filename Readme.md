@@ -13,6 +13,26 @@
 ### 设计提示
 - 用户产生的答题文件，应以用户名+系统时间.txt的形式存储，以便于进行管理。
 
+## 所需的库
+- cJSON
+- libmicrohttpd
+- ncurses
+### 安装
+
+#### archlinux
+```bash
+sudo pacman -S ncurses libmicrohttpd cjson
+```
+#### debian
+```bash
+sudo apt install libncurses5-dev libmicrohttpd-dev libcjson-dev
+```
+#### macos
+```bash
+brew install ncurses libmicrohttpd cjson
+```
+### windows
+请自行下载源码编译安装
 
 ## 编译运行
 ```bash

@@ -37,5 +37,6 @@ cJSON *saveRoot(cJSON *root, STU *L);
 void save_students_to_file(cJSON *root);
 cJSON *read_students_from_file(char *filename);
 bool stuExist(STU *L, char *sch_num);
+void disableEcho(char *prompt, char *password);
 
 #endif

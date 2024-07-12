@@ -5,6 +5,32 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <termios.h>
+
+/**
+ * @brief 取消回显
+ * @param prompt 提示信息
+ * @param password 密码
+ */
+void disableEcho(char *prompt, char *password) {
+    struct termios oldt, newt;
+
+    // 显示提示信息
+    printf("%s", prompt);
+
+    // 关闭回显
+    tcgetattr(STDIN_FILENO, &oldt);
+    newt = oldt;
+    newt.c_lflag &= ~(ECHO);
+    tcsetattr(STDIN_FILENO, TCSANOW, &newt);
+
+    // 读取密码
+    scanf("%s", password);
+
+    // 恢复回显
+    tcsetattr(STDIN_FILENO, TCSANOW, &oldt);
+    printf("\n"); // 为了美观，输入密码后换行
+}
 
 /**
  * @brief 创建表头，初始化链表
@@ -378,8 +404,7 @@ void ListModify(STU *L)
                 flag = 0;
                 break;
             case 6:
-                printf("请输入您修改后的密码:");
-                scanf("%s", number);
+                disableEcho("请输入您修改后的密码:", number);
                 strcpy(p->password, number);
                 flag = 0;
                 break;
@@ -452,8 +477,7 @@ void Output(STU *L)
 void changepassword(STU *p)
 {
     char password[20];
-    printf("请输入旧密码:");
-    scanf("%s", password);
+    disableEcho("请输入原密码:", password);
     if (strcmp(p->password, password) != 0)
     {
         printf("密码错误！\n");
@@ -461,8 +485,7 @@ void changepassword(STU *p)
     }
     else
     {
-        printf("请输入新密码:");
-        scanf("%s", password);
+        disableEcho("请输入新密码:", password);
         strcpy(p->password, password);
         printf("密码修改成功！\n");
         return;
@@ -497,14 +520,23 @@ void studentmodel(cJSON *root, STU *L)
     }
     if (p->password[0] == '\0')
     {
-        printf("请设置密码:");
-        scanf("%s", password);
+        disableEcho("由于您是第一次登录，请设置密码:", password);
+        char password2[20];
+        disableEcho("请再次输入密码:", password2);
+        if (strcmp(password, password2) != 0)
+        {
+            printf("两次密码输入不一致！\n");
+            getchar();
+            printf("\n请按任意键返回主菜单\n");
+            getchar();
+            system("clear");
+            return;
+        }
         strcpy(p->password, password);
     }
     else
     {
-        printf("请输入密码:");
-        scanf("%s", password);
+        disableEcho("请输入密码:", password);
         if (strcmp(p->password, password) != 0)
         {
             printf("密码错误！\n");
@@ -576,8 +608,7 @@ void teachermodel(cJSON *root, STU *L)
         system("clear");
         return;
     }
-    printf("请输入密码:");
-    scanf("%s", password);
+    disableEcho("请输入密码:", password);
     if (strcmp(password, "123456") != 0)
     {
         printf("密码错误，请重新输入！\n");

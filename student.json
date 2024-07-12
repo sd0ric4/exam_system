@@ -14,7 +14,7 @@
 		"xb":	1,
 		"age":	1,
 		"sch_num":	"1",
-		"password":	"",
+		"password":	"123",
 		"countStuents":	0,
 		"countAnswerTimes":	0,
 		"countRightTimes":	0

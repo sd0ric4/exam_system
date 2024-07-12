@@ -1,7 +1,7 @@
 #include "manage.h"
 #include "mode.h"
-#include "ui.h"
 #include "student.h"
+#include "ui.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -11,7 +11,8 @@
  * @param L 链表头指针
  * @return STU* 返回链表头指针
  */
-STU *ListInit(STU *L) {
+STU *ListInit(STU *L)
+{
     STU *head = NULL;
     head = (STU *)malloc(sizeof(STU));
     head->next = NULL;
@@ -23,7 +24,8 @@ STU *ListInit(STU *L) {
  * @param root json根节点
  * @param stu 学生信息
  */
-void add_student_to_json(cJSON *root, STU *stu) {
+void add_student_to_json(cJSON *root, STU *stu)
+{
     cJSON *student = cJSON_CreateObject();
     cJSON_AddStringToObject(student, "name", stu->name);
     cJSON_AddStringToObject(student, "no", stu->no);
@@ -43,8 +45,10 @@ void add_student_to_json(cJSON *root, STU *stu) {
  * @param rootNum json根节点的数量
  * @param L 链表头指针
  */
-void read_student_from_json(cJSON *root, int rootNum, STU *L) {
-    for (int i = 0; i < rootNum; i++) {
+void read_student_from_json(cJSON *root, int rootNum, STU *L)
+{
+    for (int i = 0; i < rootNum; i++)
+    {
         STU *stu = (STU *)malloc(sizeof(STU));
         cJSON *item = cJSON_GetArrayItem(root, i);
         strcpy(stu->name, cJSON_GetObjectItem(item, "name")->valuestring);
@@ -67,11 +71,13 @@ void read_student_from_json(cJSON *root, int rootNum, STU *L) {
  * @param L 链表头指针
  * @return cJSON* 返回json根节点
  */
-cJSON *saveRoot(cJSON *root, STU *L) {
+cJSON *saveRoot(cJSON *root, STU *L)
+{
     STU *p = L->next;
     cJSON_Delete(root);
     root = cJSON_CreateArray();
-    while (p != NULL) {
+    while (p != NULL)
+    {
         add_student_to_json(root, p);
         p = p->next;
     }
@@ -82,9 +88,11 @@ cJSON *saveRoot(cJSON *root, STU *L) {
  * @brief 保存学生信息到文件
  * @param root json根节点
  */
-void save_students_to_file(cJSON *root) {
+void save_students_to_file(cJSON *root)
+{
     FILE *file = fopen("student.json", "w");
-    if (!file) {
+    if (!file)
+    {
         perror("Error opening file");
         return;
     }
@@ -99,9 +107,11 @@ void save_students_to_file(cJSON *root) {
  * @param filename 文件名
  * @return cJSON* 返回json根节点
  */
-cJSON *read_students_from_file(char *filename) {
+cJSON *read_students_from_file(char *filename)
+{
     FILE *file = fopen(filename, "r");
-    if (!file) {
+    if (!file)
+    {
         return NULL;
     }
 
@@ -125,10 +135,13 @@ cJSON *read_students_from_file(char *filename) {
  * @param sch_num 学号
  * @return true/false
  */
-bool stuExist(STU *L, char *sch_num) {
+bool stuExist(STU *L, char *sch_num)
+{
     STU *p = L->next;
-    while (p != NULL) {
-        if (strcmp(p->sch_num, sch_num) == 0) {
+    while (p != NULL)
+    {
+        if (strcmp(p->sch_num, sch_num) == 0)
+        {
             return true;
         }
         p = p->next;
@@ -142,16 +155,21 @@ bool stuExist(STU *L, char *sch_num) {
  * @param n 学生数量
  * @return STU* 返回链表头指针
  */
-STU *ListCreate(STU *L, int n) {
+STU *ListCreate(STU *L, int n)
+{
     int i;
-    for (i = 0; i < n; i++) {
+    for (i = 0; i < n; i++)
+    {
         STU *p;
         // 将新生成的节点插入到链表中
         p = NULL;
         p = (STU *)malloc(sizeof(STU));
-        if (Input(p, i, L) == false) {
+        if (Input(p, i, L) == false)
+        {
             i--;
-        } else {
+        }
+        else
+        {
             p->next = L->next;
             L->next = p;
         }
@@ -163,14 +181,16 @@ STU *ListCreate(STU *L, int n) {
  * @brief 对链表进行节点的插入操作
  * @param L 链表头指针
  */
-void ListInsert(STU *L) {
+void ListInsert(STU *L)
+{
     STU *s = NULL;
     STU *p = L->next;
     // 生成一个新节点s
     s = (STU *)malloc(sizeof(STU));
     printf("请输入您要插入的考生的学号:");
     scanf("%s", s->sch_num);
-    if (stuExist(L, s->sch_num)) {
+    if (stuExist(L, s->sch_num))
+    {
         printf("该考生已存在，无法插入！\n");
         return;
     }
@@ -194,19 +214,23 @@ void ListInsert(STU *L) {
  * @brief 对链表的进行节点的删除操作
  * @param L 链表头指针
  */
-void ListDelete(STU *L) {
+void ListDelete(STU *L)
+{
     char n[40];
     char choose;
     STU *p = L->next, *pre = L; // 定义p指针指向头节点的指向，定义pre指向头节点，pre始终指向p的前驱节点
     if (p == NULL)
         printf("数据为空，无法删除！");
-    else {
+    else
+    {
         printf("请输入您要删除的考生的学号:");
         scanf("%s", n);
-        while (strcmp(p->sch_num, n) != 0) {
+        while (strcmp(p->sch_num, n) != 0)
+        {
             pre = p;
             p = pre->next;
-            if (p == NULL) {
+            if (p == NULL)
+            {
                 printf("没有找到相关信息，无法删除\n");
                 return;
             }
@@ -217,15 +241,20 @@ void ListDelete(STU *L) {
         printf("\n是否确认删除该考生信息？(Y/N)\n");
         getchar();
         scanf("%c", &choose);
-        if (choose == 'Y' || choose == 'y') {
+        if (choose == 'Y' || choose == 'y')
+        {
             pre->next = p->next;
             free(p);
             printf("删除成功!");
             return;
-        } else if (choose == 'N' || choose == 'n') {
+        }
+        else if (choose == 'N' || choose == 'n')
+        {
             printf("已取消删除");
             return;
-        } else {
+        }
+        else
+        {
             printf("输入有误！");
             return;
         }
@@ -234,8 +263,9 @@ void ListDelete(STU *L) {
 /**
  * @brief 打印表头
  */
-void printHeader() {
-    printf("| %-39s | %-17s | %-6s | %-4s | %-19s | %-12s | %-19s | %-12s |\n", 
+void printHeader()
+{
+    printf("| %-39s | %-17s | %-6s | %-4s | %-19s | %-12s | %-19s | %-8s |\n",
            "name", "identityCard", "gender", "age", "studentNumber", "answerTimes", "password", "accuracy");
 }
 
@@ -243,8 +273,9 @@ void printHeader() {
  * @brief 打印学生信息
  * @param p 学生信息
  */
-void printstu(STU *p) {
-    printf("| %-39s | %-17s | %-6s | %-4d | %-19s | %-12d | %-19s | %-12d%% |\n",
+void printstu(STU *p)
+{
+    printf("| %-39s | %-17s | %-6s | %-4d | %-19s | %-12d | %-19s | %-8.2f |\n",
            p->name,
            p->no,
            p->xb == 0 ? "female" : "male",
@@ -252,24 +283,28 @@ void printstu(STU *p) {
            p->sch_num,
            p->countStuents,
            p->password,
-           ((p->countRightTimes)/(p->countAnswerTimes)*100));
+           p->countStuents == 0 ? 0 : (double)p->countRightTimes / p->countStuents * 100);
 }
 
 /**
  * @brief 对链表进行查找操作
  * @param L 链表头指针
  */
-void ListSearch(STU *L) {
+void ListSearch(STU *L)
+{
     char n[40];
     STU *p = L->next;
     if (p == NULL)
         printf("数据为空，无法查找！");
-    else {
+    else
+    {
         printf("请输入您要查找的考生的学号:");
         scanf("%s", n);
-        while (strcmp(p->sch_num, n) != 0) {
+        while (strcmp(p->sch_num, n) != 0)
+        {
             p = p->next;
-            if (p == NULL) {
+            if (p == NULL)
+            {
                 printf("没有找到相关信息\n");
                 return;
             }
@@ -284,19 +319,23 @@ void ListSearch(STU *L) {
  * @brief 对链表进行修改操作
  * @param L 链表头指针
  */
-void ListModify(STU *L) {
+void ListModify(STU *L)
+{
     int x, a, item;
     int flag = 1;
     char nam[40], no[18], number[20], n[40];
     STU *p = L->next;
     if (p == NULL)
         printf("数据为空，无法修改！");
-    else {
+    else
+    {
         printf("请输入您要修改的考生的学号:");
         scanf("%s", n);
-        while (strcmp(p->sch_num, n) != 0) {
+        while (strcmp(p->sch_num, n) != 0)
+        {
             p = p->next;
-            if (p == NULL) {
+            if (p == NULL)
+            {
                 printf("没有找到相关信息\n");
                 return;
             }
@@ -304,8 +343,10 @@ void ListModify(STU *L) {
         printf("请选择您要修改的考生信息类型:\n");
         printf("1、姓名\n2、身份证号\n3、性别\n4、年龄\n5、学号\n6、密码\n");
         scanf("%d", &item);
-        while (flag == 1) {
-            switch (item) {
+        while (flag == 1)
+        {
+            switch (item)
+            {
             case 1:
                 printf("请输入您修改后的姓名:");
                 scanf("%s", nam);
@@ -360,10 +401,12 @@ void ListModify(STU *L) {
  * @param L 链表头指针
  * @return true/false
  */
-bool Input(STU *p, int i, STU *L) {
+bool Input(STU *p, int i, STU *L)
+{
     printf("请输入第%d名考生的学号:", i + 1);
     scanf("%s", p->sch_num);
-    if (stuExist(L, p->sch_num)) {
+    if (stuExist(L, p->sch_num))
+    {
         printf("该考生已存在，请重新输入！\n");
         return false;
     }
@@ -373,7 +416,7 @@ bool Input(STU *p, int i, STU *L) {
     scanf("%s", p->no);
     printf("请输入第%d名考生的性别（女性为0，男性为1）:", i + 1);
     scanf("%d", &p->xb);
-    if(p->xb != 0 && p->xb != 1)
+    if (p->xb != 0 && p->xb != 1)
     {
         printf("性别输入错误，请重新输入！\n");
         return false;
@@ -391,9 +434,11 @@ bool Input(STU *p, int i, STU *L) {
  * @brief 输出学生信息
  * @param L 链表头指针
  */
-void Output(STU *L) {
+void Output(STU *L)
+{
     STU *p = L->next;
-    while (p != NULL) {
+    while (p != NULL)
+    {
         printstu(p);
         p = p->next;
     }
@@ -404,14 +449,18 @@ void Output(STU *L) {
  * @param root json根节点
  * @param L 链表头指针
  */
-void changepassword(STU *p) {
+void changepassword(STU *p)
+{
     char password[20];
     printf("请输入旧密码:");
     scanf("%s", password);
-    if (strcmp(p->password, password) != 0) {
+    if (strcmp(p->password, password) != 0)
+    {
         printf("密码错误！\n");
         return;
-    } else {
+    }
+    else
+    {
         printf("请输入新密码:");
         scanf("%s", password);
         strcpy(p->password, password);
@@ -425,16 +474,19 @@ void changepassword(STU *p) {
  * @param root json根节点
  * @param L 链表头指针
  */
-void studentmodel(cJSON *root, STU *L) {
+void studentmodel(cJSON *root, STU *L)
+{
     int item;
     char num[20];
     char password[20];
     STU *p = L->next;
     printf("请输入学号:");
     scanf("%s", num);
-    while (strcmp(p->sch_num, num) != 0) {
+    while (strcmp(p->sch_num, num) != 0)
+    {
         p = p->next;
-        if (p == NULL) {
+        if (p == NULL)
+        {
             printf("没有找到相关信息！\n");
             getchar();
             printf("\n请按任意键返回主菜单\n");
@@ -443,14 +495,18 @@ void studentmodel(cJSON *root, STU *L) {
             return;
         }
     }
-    if (p->password[0] == '\0') {
+    if (p->password[0] == '\0')
+    {
         printf("请设置密码:");
         scanf("%s", password);
         strcpy(p->password, password);
-    } else {
+    }
+    else
+    {
         printf("请输入密码:");
         scanf("%s", password);
-        if (strcmp(p->password, password) != 0) {
+        if (strcmp(p->password, password) != 0)
+        {
             printf("密码错误！\n");
             getchar();
             printf("\n请按任意键返回主菜单\n");
@@ -461,17 +517,17 @@ void studentmodel(cJSON *root, STU *L) {
     }
     printf("欢迎您，%s同学!\n", p->name);
 
-    do {
+    do
+    {
         studentMenu();
         printf("请输入相应的数字，进行相应的操作:\n");
         scanf("%d", &item);
         system("clear");
-        switch (item) {
+        switch (item)
+        {
         case 1:
             // 添加答题功能代码
             run_better_tui_mode();
-            p->countAnswerTimes += question_count;
-            p->countRightTimes += correct_count;
             p->countStuents += 1;
             break;
         case 2:
@@ -504,13 +560,15 @@ void studentmodel(cJSON *root, STU *L) {
  * @param root json根节点
  * @param L 链表头指针
  */
-void teachermodel(cJSON *root, STU *L) {
+void teachermodel(cJSON *root, STU *L)
+{
     int item, n;
     char nam[30];
     char password[30];
     printf("请输入管理员账号:");
     scanf("%s", nam);
-    if (strcmp(nam, "admin") != 0) {
+    if (strcmp(nam, "admin") != 0)
+    {
         printf("账号错误，请重新输入！\n");
         getchar();
         printf("\n请按任意键返回主菜单\n");
@@ -520,7 +578,8 @@ void teachermodel(cJSON *root, STU *L) {
     }
     printf("请输入密码:");
     scanf("%s", password);
-    if (strcmp(password, "123456") != 0) {
+    if (strcmp(password, "123456") != 0)
+    {
         printf("密码错误，请重新输入！\n");
         getchar();
         printf("\n请按任意键返回主菜单\n");
@@ -529,12 +588,14 @@ void teachermodel(cJSON *root, STU *L) {
         return;
     }
     system("clear");
-    do {
+    do
+    {
         teacherMenu();
         printf("请输入相应的数字，进行相应的操作:\n");
         scanf("%d", &item);
         system("clear");
-        switch (item) {
+        switch (item)
+        {
         case 1:
             printf("请输入您要录入的考生人数:");
             scanf("%d", &n);
@@ -603,4 +664,3 @@ void teachermodel(cJSON *root, STU *L) {
         printf("\n\n\n\n");
     } while (item);
 }
-

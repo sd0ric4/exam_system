@@ -262,7 +262,7 @@ void ListDelete(STU *L)
             }
         }
         printf("您要删除的考生信息如下：\n");
-        printf("姓名\t\t身份证号\t\t性别\t年龄\t学号\t\t答题次数\t密码\n");
+        printHeader();
         printstu(p);
         printf("\n是否确认删除该考生信息？(Y/N)\n");
         getchar();

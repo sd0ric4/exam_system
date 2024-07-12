@@ -158,10 +158,15 @@ void run_manage_mode()
 void run_exercise_management_mode()
 {
     setlocale(LC_ALL, "");
-
+    char filename[256];
+    printf("请输入题库名：");
+    scanf("%s", filename);
+    char creator[256];
+    printf("请输入作者名：");
+    scanf("%s", creator);
     ExerciseDataBase db = {0}; // 初始化数据库
-    strcpy(db.ExerciseName, "ExampleDB");
-    strcpy(db.CreatorName, "Creator");
+    strcpy(db.ExerciseName, filename);
+    strcpy(db.CreatorName, creator);
     exerciseMenu();
     int choice;
     while (1)

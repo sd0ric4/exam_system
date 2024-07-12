@@ -1,0 +1,15 @@
+[{
+		"chapter":	"happyhappy",
+		"type":	"单选题",
+		"title":	"你好",
+		"options":	[{
+				"A":	"不会"
+			}, {
+				"B":	"好的"
+			}, {
+				"C":	"不会"
+			}, {
+				"D":	"吧"
+			}],
+		"correctAnswer":	"A"
+	}]

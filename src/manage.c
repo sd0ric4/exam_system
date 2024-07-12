@@ -405,6 +405,13 @@ void ListModify(STU *L)
                 break;
             case 6:
                 disableEcho("请输入您修改后的密码:", number);
+                char password2[20];
+                disableEcho("请再次输入密码:", password2);
+                if (strcmp(number, password2) != 0)
+                {
+                    printf("两次密码输入不一致！\n");
+                    return;
+                }
                 strcpy(p->password, number);
                 flag = 0;
                 break;
@@ -485,7 +492,14 @@ void changepassword(STU *p)
     }
     else
     {
-        disableEcho("请输入新密码:", password);
+        disableEcho("请输入新密码:", password); 
+        char password2[20];
+        disableEcho("请再次输入密码:", password2);
+        if (strcmp(password, password2) != 0)
+        {
+            printf("两次密码输入不一致！\n");
+            return;
+        }
         strcpy(p->password, password);
         printf("密码修改成功！\n");
         return;
@@ -599,7 +613,7 @@ void teachermodel(cJSON *root, STU *L)
     char password[30];
     printf("请输入管理员账号:");
     scanf("%s", nam);
-    if (strcmp(nam, "admin") != 0)
+    if (strcmp(nam, ADMIN_NAME) != 0)
     {
         printf("账号错误，请重新输入！\n");
         getchar();
@@ -609,7 +623,7 @@ void teachermodel(cJSON *root, STU *L)
         return;
     }
     disableEcho("请输入密码:", password);
-    if (strcmp(password, "123456") != 0)
+    if (strcmp(password, ADMIN_PASSWORD) != 0)
     {
         printf("密码错误，请重新输入！\n");
         getchar();

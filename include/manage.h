@@ -39,4 +39,7 @@ cJSON *read_students_from_file(char *filename);
 bool stuExist(STU *L, char *sch_num);
 void disableEcho(char *prompt, char *password);
 
+// 定义宏
+#define ADMIN_NAME "admin"
+#define ADMIN_PASSWORD "123456"
 #endif

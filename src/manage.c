@@ -460,6 +460,7 @@ void studentmodel(cJSON *root, STU *L) {
         case 1:
             // 添加答题功能代码
             run_better_tui_mode();
+            p->countStuents += 1;
             break;
         case 2:
             changepassword(p);
@@ -589,4 +590,16 @@ void teachermodel(cJSON *root, STU *L) {
         }
         printf("\n\n\n\n");
     } while (item);
+}
+
+void save_students_to_file(cJSON *root) {
+    FILE *file = fopen("student.json", "w");
+    if (!file) {
+        perror("Error opening file");
+        return;
+    }
+    char *json_string = cJSON_Print(root);
+    fprintf(file, "%s", json_string);
+    free(json_string);
+    fclose(file);
 }

@@ -14,6 +14,8 @@ typedef struct student {
     char password[20];
     struct student *next;
     int countStuents;
+    int countAnswerTimes;
+    int countRightTimes;
 } STU;
 
 // 函数声明

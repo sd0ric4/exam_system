@@ -29,6 +29,7 @@ void Output(STU *L);
 void studentmodel(cJSON *root, STU *L);
 void teachermodel(cJSON *root, STU *L);
 void printstu(STU *p);
+void printHeader();
 void ListModify(STU *L);
 void changepassword(STU *p);
 void add_student_to_json(cJSON *root, STU *stu);

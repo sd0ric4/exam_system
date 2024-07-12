@@ -592,14 +592,3 @@ void teachermodel(cJSON *root, STU *L) {
     } while (item);
 }
 
-void save_students_to_file(cJSON *root) {
-    FILE *file = fopen("student.json", "w");
-    if (!file) {
-        perror("Error opening file");
-        return;
-    }
-    char *json_string = cJSON_Print(root);
-    fprintf(file, "%s", json_string);
-    free(json_string);
-    fclose(file);
-}

@@ -1,6 +1,7 @@
 #include "manage.h"
 #include "mode.h"
 #include "ui.h"
+#include "student.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -31,6 +32,8 @@ void add_student_to_json(cJSON *root, STU *stu) {
     cJSON_AddStringToObject(student, "sch_num", stu->sch_num);
     cJSON_AddStringToObject(student, "password", stu->password);
     cJSON_AddNumberToObject(student, "countStuents", stu->countStuents);
+    cJSON_AddNumberToObject(student, "countAnswerTimes", stu->countAnswerTimes);
+    cJSON_AddNumberToObject(student, "countRightTimes", stu->countRightTimes);
     cJSON_AddItemToArray(root, student);
 }
 
@@ -51,6 +54,8 @@ void read_student_from_json(cJSON *root, int rootNum, STU *L) {
         strcpy(stu->sch_num, cJSON_GetObjectItem(item, "sch_num")->valuestring);
         strcpy(stu->password, cJSON_GetObjectItem(item, "password")->valuestring);
         stu->countStuents = cJSON_GetObjectItem(item, "countStuents")->valueint;
+        stu->countAnswerTimes = cJSON_GetObjectItem(item, "countAnswerTimes")->valueint;
+        stu->countRightTimes = cJSON_GetObjectItem(item, "countRightTimes")->valueint;
         stu->next = L->next;
         L->next = stu;
     }
@@ -177,7 +182,9 @@ void ListInsert(STU *L) {
     scanf("%d", &s->xb);
     printf("请输入您要插入的考生的年龄:");
     scanf("%d", &s->age);
-    s->countStuents = 1;
+    s->countStuents = 0;
+    s->countAnswerTimes = 0;
+    s->countRightTimes = 0;
     s->password[0] = '\0';
     s->next = L->next;
     L->next = s;
@@ -228,8 +235,8 @@ void ListDelete(STU *L) {
  * @brief 打印表头
  */
 void printHeader() {
-    printf("| %-39s | %-17s | %-6s | %-4s | %-19s | %-12s | %-19s |\n", 
-           "name", "identityCard", "gender", "age", "studentNumber", "answerTimes", "password");
+    printf("| %-39s | %-17s | %-6s | %-4s | %-19s | %-12s | %-19s | %-12s |\n", 
+           "name", "identityCard", "gender", "age", "studentNumber", "answerTimes", "password", "accuracy");
 }
 
 /**
@@ -237,14 +244,15 @@ void printHeader() {
  * @param p 学生信息
  */
 void printstu(STU *p) {
-    printf("| %-39s | %-17s | %-6s | %-4d | %-19s | %-12d | %-19s |\n",
+    printf("| %-39s | %-17s | %-6s | %-4d | %-19s | %-12d | %-19s | %-12d%% |\n",
            p->name,
            p->no,
            p->xb == 0 ? "female" : "male",
            p->age,
            p->sch_num,
            p->countStuents,
-           p->password);
+           p->password,
+           ((p->countRightTimes)/(p->countAnswerTimes)*100));
 }
 
 /**
@@ -373,6 +381,8 @@ bool Input(STU *p, int i, STU *L) {
     printf("请输入第%d名考生的年龄:", i + 1);
     scanf("%d", &p->age);
     p->countStuents = 0;
+    p->countAnswerTimes = 0;
+    p->countRightTimes = 0;
     p->password[0] = '\0';
     return true;
 }
@@ -460,6 +470,8 @@ void studentmodel(cJSON *root, STU *L) {
         case 1:
             // 添加答题功能代码
             run_better_tui_mode();
+            p->countAnswerTimes += question_count;
+            p->countRightTimes += correct_count;
             p->countStuents += 1;
             break;
         case 2:

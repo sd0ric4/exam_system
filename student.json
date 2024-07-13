@@ -1,14 +1,4 @@
 [{
-		"name":	"2",
-		"no":	"2",
-		"xb":	1,
-		"age":	2,
-		"sch_num":	"2",
-		"password":	"123",
-		"countStuents":	1,
-		"countAnswerTimes":	0,
-		"countRightTimes":	0
-	}, {
 		"name":	"1",
 		"no":	"1",
 		"xb":	1,
@@ -16,6 +6,16 @@
 		"sch_num":	"1",
 		"password":	"123",
 		"countStuents":	0,
+		"countAnswerTimes":	0,
+		"countRightTimes":	0
+	}, {
+		"name":	"2",
+		"no":	"2",
+		"xb":	1,
+		"age":	2,
+		"sch_num":	"2",
+		"password":	"123",
+		"countStuents":	1,
 		"countAnswerTimes":	0,
 		"countRightTimes":	0
 	}]

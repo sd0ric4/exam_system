@@ -272,7 +272,7 @@ void generateExercise(ExerciseDataBase *db, int numQuestions) {
     printf("试卷和答案已分别生成并保存到文件\n");
 
     // 生成 JSON 文件,到QUESTION_BANK_PATH目录下
-    char JsonFilename[32];
+    char JsonFilename[64];
 
     snprintf(JsonFilename, sizeof(JsonFilename), "%s/%s.json", QUESTION_BANK_PATH, db->ExerciseName);
     generateJsonFile(db, JsonFilename);
